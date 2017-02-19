@@ -15,15 +15,19 @@ export class Content extends React.Component {
             'newPerson': '',
             'personLeft': '',
             'users': [],
-            'onlineNum': 0
+            'onlineNum': 0,
+            'testChat': [],
+            'testUser': [],
+            'testOnlineNum': 0,
         };
-         Socket.on('all chats', (data) => {
-            this.setState({
-                'chats': data['chats'],
-                // 'users': data['users'],
-                // 'onlineNum': data['onlineNum'],
-            });
-        })
+        // Socket.on('allchats', (data) => {
+        //     this.setState({
+        //         'testChat': data['chats'],
+        //         // 'users': data['users'],
+        //         // 'onlineNum': data['onlineNum'],
+        //     });
+        // })
+         
     }
 
     componentDidMount() {
@@ -36,6 +40,23 @@ export class Content extends React.Component {
             });
             // console.log(this.);
         
+        })
+        
+        Socket.on('allchats', (data) => {
+            this.setState({
+                'testChat': data['chats'],
+                // 'users': data['users'],
+                // 'onlineNum': data['onlineNum'],
+            });
+        })
+        
+        Socket.on('allusers', (data) => {
+            this.setState({
+                'testUser': data['users'],
+                'testOnlineNum': data['onlineNum'],
+                // 'users': data['users'],
+                // 'onlineNum': data['onlineNum'],
+            });
         })
         
         Socket.on('fbConn', (data) => {
@@ -73,6 +94,22 @@ export class Content extends React.Component {
                 {n.name}: {n.chat}            
             </li>        
         );
+        
+        let testChat = this.state.testChat.map((n, index) =>            
+            <li key={index}>                
+                <img src={n.picture} />   
+                Test
+                {n.name}: {n.chat}            
+            </li>        
+        );
+        let testUser = this.state.testUser.map((n, index) =>            
+            <li key={index}>     
+                Online now ({this.state.testOnlineNum}):
+                <img src={n.picture} />                
+                {n.name}            
+            </li>        
+        );
+        
         let users = this.state.users.map((n, index) =>            
             <li key={index}>     
                 Online ({this.state.onlineNum}):
@@ -99,6 +136,8 @@ export class Content extends React.Component {
                 <Button />
                 <ul>{chats}</ul>
                 <ul>{users}</ul>
+                <ul>{testChat}</ul>
+                <ul>{testUser}</ul>
             </div>
         );
     }

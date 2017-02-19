@@ -31,16 +31,19 @@ export class Logout extends React.Component {
         event.preventDefault();
         FB.getLoginStatus((response) => {            
             if (response.status == 'connected') {  
-            // accessToken = response.authResponse.accessToken;
+            // userID = response.authResponse.userID;
                console.log(response.authResponse.userID);
-               console.log(response.authResponse.accessToken);
-               console.log("test");
+            //   console.log(response.authResponse.accessToken);
+                Socket.emit('fbDisconnected', {                    
+                    'userID': response.authResponse.userID,
+                });
+            //   console.log("test");
             }        
         });
-        // FB.logout(function(response) {
-        //   // user is now logged out
-        //   console.log(response.accessToken);
-        // });
+        
+        FB.logout(function(response) {
+          // user is now logged out
+        });
         console.log('logged out');
     }
     
