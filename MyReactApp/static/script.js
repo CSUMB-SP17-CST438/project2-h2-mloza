@@ -13104,6 +13104,10 @@ var _Users = __webpack_require__(111);
 
 var _Button = __webpack_require__(110);
 
+var _FacebookButton = __webpack_require__(234);
+
+var _Logout = __webpack_require__(235);
+
 var _Socket = __webpack_require__(38);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -13123,16 +13127,18 @@ var Content = exports.Content = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
         _this.state = {
-            // 'numbers': '',
-            'numbers': [],
-            // 'newPerson': '',
-            'personLeft': ''
+            // 'chats': '',
+            'chats': [],
+            'newPerson': '',
+            'personLeft': '',
+            'users': [],
+            'onlineNum': 0
         };
-        //  Socket.on('allnumbers', (data) => {
-        //     this.setState({
-        //         'numbers': data['numbers']
-        //     });
-        // })
+        _Socket.Socket.on('all chats', function (data) {
+            _this.setState({
+                'chats': data['chats']
+            });
+        });
         return _this;
     }
 
@@ -13141,10 +13147,24 @@ var Content = exports.Content = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            _Socket.Socket.on('all numbers', function (data) {
+            _Socket.Socket.on('all chats', function (data) {
                 _this2.setState({
-                    'numbers': data['numbers']
+                    'chats': data['chats']
                 });
+                // console.log(this.);
+            });
+
+            _Socket.Socket.on('fbConn', function (data) {
+                _this2.setState({
+                    'users': data['users'],
+                    'onlineNum': data['onlineNum']
+                });
+            });
+
+            FB.getLoginStatus(function (response) {
+                if (response.status == 'connected') {
+                    console.log("logged in");
+                }
             });
 
             _Socket.Socket.on('connectionLost', function (data) {
@@ -13155,22 +13175,35 @@ var Content = exports.Content = function (_React$Component) {
             });
         }
         // <p>{this.state.newPerson}</p> 
-        // <p>{this.state.numbers}</p>
+        // <p>{this.state.chats}</p>
 
     }, {
         key: 'render',
         value: function render() {
-            // let numbers = this.state.numbers.map(
+            var _this3 = this;
+
+            // let chats = this.state.chats.map(
             //     (n, index) => <li key={index}>{n}</li>
             // );
-            var numbers = this.state.numbers.map(function (n, index) {
+            var chats = this.state.chats.map(function (n, index) {
                 return React.createElement(
                     'li',
                     { key: index },
                     React.createElement('img', { src: n.picture }),
                     n.name,
                     ': ',
-                    n.number
+                    n.chat
+                );
+            });
+            var users = this.state.users.map(function (n, index) {
+                return React.createElement(
+                    'li',
+                    { key: index },
+                    'Online (',
+                    _this3.state.onlineNum,
+                    '):',
+                    React.createElement('img', { src: n.picture }),
+                    n.name
                 );
             });
             return React.createElement(
@@ -13193,11 +13226,18 @@ var Content = exports.Content = function (_React$Component) {
                     'data-size': 'medium',
                     'data-show-faces': 'false',
                     'data-auto-logout-link': 'true' }),
+                React.createElement(_FacebookButton.FacebookButton, null),
+                React.createElement(_Logout.Logout, null),
                 React.createElement(_Button.Button, null),
                 React.createElement(
                     'ul',
                     null,
-                    numbers
+                    chats
+                ),
+                React.createElement(
+                    'ul',
+                    null,
+                    users
                 )
             );
         }
@@ -13345,11 +13385,12 @@ var Button = exports.Button = function (_React$Component) {
             event.preventDefault();
             FB.getLoginStatus(function (response) {
                 if (response.status == 'connected') {
-                    _Socket.Socket.emit('new number', {
+                    _Socket.Socket.emit('new chat', {
                         'facebook_user_token': response.authResponse.accessToken,
-                        'number': _this2.state.value
+                        'chat': _this2.state.value
 
                     });
+                    console.log(_this2.state.value);
                 }
             });
             // Socket.emit('new number', {
@@ -13379,7 +13420,7 @@ var Button = exports.Button = function (_React$Component) {
                 React.createElement(
                     'button',
                     null,
-                    'Send up a random number!'
+                    'Send!'
                 )
             );
         }
@@ -30398,6 +30439,213 @@ var _Content = __webpack_require__(105);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 ReactDOM.render(React.createElement(_Content.Content, null), document.getElementById('content'));
+
+/***/ }),
+/* 234 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FacebookButton = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(28);
+
+var React = _interopRequireWildcard(_react);
+
+var _Socket = __webpack_require__(38);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FacebookButton = exports.FacebookButton = function (_React$Component) {
+    _inherits(FacebookButton, _React$Component);
+
+    function FacebookButton(props) {
+        _classCallCheck(this, FacebookButton);
+
+        var _this = _possibleConstructorReturn(this, (FacebookButton.__proto__ || Object.getPrototypeOf(FacebookButton)).call(this, props));
+
+        _this.state = {
+            'buttonName': 'Facebook Login'
+        };
+
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
+    }
+
+    _createClass(FacebookButton, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            //   FB.getLoginStatus((response) => {            
+            //     if (response.status == 'connected') {                
+            //       console.log("logged in");
+            //       this.setState({
+            //             'buttonName': 'Facebook Logout',
+            //         });
+            // } else  {
+            //     this.setState({
+            //         'buttonName': 'Facebook Login',
+            //     });
+            // }        
+            // }); 
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(event) {
+            event.preventDefault();
+            FB.login(function (response) {
+                if (response.authResponse) {
+                    console.log('Welcome!  Fetching your information.... ');
+                    FB.api('/me', function (response) {
+                        console.log('Good to see you, ' + response.name + '.');
+                        FB.getLoginStatus(function (response) {
+                            if (response.status == 'connected') {
+                                _Socket.Socket.emit('fbConnected', {
+                                    'facebook_user_token': response.authResponse.accessToken
+                                });
+                            }
+                        });
+                        //   Socket.emit('fbConnected', {                    
+                        //         'facebook_user_token': response.authResponse.accessToken,
+
+                        //     }); 
+                        this.setState({
+                            'buttonName': 'Facebook Logout'
+                        });
+                    });
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                    //  this.setState({
+                    //     'buttonName': 'Facebook Login',
+                    // });
+                }
+            });
+            console.log('Sent up the chat to server!');
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'form',
+                { onSubmit: this.handleSubmit },
+                React.createElement(
+                    'button',
+                    null,
+                    this.state.buttonName
+                )
+            );
+        }
+    }]);
+
+    return FacebookButton;
+}(React.Component);
+
+/***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Logout = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(28);
+
+var React = _interopRequireWildcard(_react);
+
+var _Socket = __webpack_require__(38);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Logout = exports.Logout = function (_React$Component) {
+    _inherits(Logout, _React$Component);
+
+    function Logout(props) {
+        _classCallCheck(this, Logout);
+
+        var _this = _possibleConstructorReturn(this, (Logout.__proto__ || Object.getPrototypeOf(Logout)).call(this, props));
+
+        _this.state = {
+            'buttonName': 'Facebook Logout'
+        };
+
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
+    }
+
+    _createClass(Logout, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            //   FB.getLoginStatus((response) => {            
+            //     if (response.status == 'connected') {                
+            //       console.log("logged in");
+            //       this.setState({
+            //             'buttonName': 'Facebook Logout',
+            //         });
+            // } else  {
+            //     this.setState({
+            //         'buttonName': 'Facebook Login',
+            //     });
+            // }        
+            // }); 
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(event) {
+            event.preventDefault();
+            FB.getLoginStatus(function (response) {
+                if (response.status == 'connected') {
+                    // accessToken = response.authResponse.accessToken;
+                    console.log(response.authResponse.userID);
+                    console.log(response.authResponse.accessToken);
+                    console.log("test");
+                }
+            });
+            // FB.logout(function(response) {
+            //   // user is now logged out
+            //   console.log(response.accessToken);
+            // });
+            console.log('logged out');
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'form',
+                { onSubmit: this.handleSubmit },
+                React.createElement(
+                    'button',
+                    null,
+                    this.state.buttonName
+                )
+            );
+        }
+    }]);
+
+    return Logout;
+}(React.Component);
 
 /***/ })
 /******/ ]);

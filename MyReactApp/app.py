@@ -16,14 +16,10 @@ def hello():
 
 @socketio.on('connect')
 def on_connect():
-    print 'Someone connected!!'
-    socketio.emit('allnumbers', { 
-        'numbers': all_numbers 
-        
-    })
     socketio.emit('connection', { 
         'connected': 'Guest has connected'
         }, broadcast=True)
+    
     print "sent"
     # clients+=1;
     # socketio.emit('broadcast',{ description: clients + ' clients connected!'});
@@ -40,27 +36,66 @@ def on_disconnect():
     
 
 
-all_numbers = [];
-@socketio.on('new number')
-def on_new_number(data):
+all_chats = [];
+all_online_users = [];
+@socketio.on('new chat')
+def on_new_chat(data):
     response = requests.get( 
         'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cpicture&access_token=' + data['facebook_user_token'])    
     json = response.json()
-    all_numbers.append({        
+    print json["id"]
+    # print json.dumps(json, indent=2)
+    all_chats.append({        
         'name': json['name'],        
         'picture': json['picture']['data']['url'],        
-        'number': data['number'],    
+        'chat': data['chat'],   
     })
-    print json['name']
+    print "chat: " + data['chat'];
+    for num in all_chats:
+        print num["chat"] + "yay"
+    # flag = False;
+    # for user in all_online_users:
+    #     print user["name"];
+    #     if (user["name"] == json['name']):
+    #         flag = True;
+    # if (flag == False):
+    #     all_online_users.append({
+    #             'name': json['name'],        
+    #             'picture': json['picture']['data']['url'], 
+    #         })
+    # print json['name']
     print "Got an event for new number with data:", data
     # TODO: Fill me out!
-    # all_numbers.append(data['number'])
-    socketio.emit('all numbers', { 
-        'numbers': all_numbers
+    # all_chats.append(data['number'])
+    socketio.emit('all chats', { 
+        'chats': all_chats,
+        # 'users': all_online_users,
+        # 'onlineNum': len(all_online_users),
         }, broadcast=True)
     # socketio.emit('all numbers', { 
     #     'numbers': data['number']
     #     }, broadcast=True)
+    
+@socketio.on('fbConnected')
+def fbConnection(data):
+    response = requests.get( 
+    'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cpicture&access_token=' + data['facebook_user_token'])    
+    json = response.json()
+    print "fb connected";
+    flag = False;
+    for user in all_online_users:
+        print user["name"];
+        if (user["name"] == json['name']):
+            flag = True;
+    if (flag == False):
+        all_online_users.append({
+                'name': json['name'],        
+                'picture': json['picture']['data']['url'], 
+            })
+    socketio.emit('fbConn', { 
+        'users': all_online_users,
+        'onlineNum': len(all_online_users),
+        }, broadcast=True)
 
 socketio.run(
     app,

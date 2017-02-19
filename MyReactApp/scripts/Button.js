@@ -15,11 +15,12 @@ export class Button extends React.Component {
         event.preventDefault();
         FB.getLoginStatus((response) => {            
             if (response.status == 'connected') {                
-                Socket.emit('new number', {                    
+                Socket.emit('new chat', {                    
                     'facebook_user_token': response.authResponse.accessToken,                    
-                    'number': this.state.value,
+                    'chat': this.state.value,
                     
                 });  
+                console.log(this.state.value);
             }        
         });
         // Socket.emit('new number', {
@@ -43,7 +44,7 @@ export class Button extends React.Component {
         return (
             <form onSubmit={this.handleSubmit}>
             <input type="text" value={this.state.value} onChange={this.handleChange} />
-                <button>Send up a random number!</button>
+                <button>Send!</button>
             </form>
         );
     }

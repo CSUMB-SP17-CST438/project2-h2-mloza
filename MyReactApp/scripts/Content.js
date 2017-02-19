@@ -2,30 +2,56 @@ import * as React from 'react';
 
 import { Users } from './Users';
 import { Button } from './Button';
+import { FacebookButton } from './FacebookButton';
+import { Logout } from './Logout';
 import { Socket } from './Socket';
 
 export class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // 'numbers': '',
-            'numbers': [],
-            // 'newPerson': '',
+            // 'chats': '',
+            'chats': [],
+            'newPerson': '',
             'personLeft': '',
+            'users': [],
+            'onlineNum': 0
         };
-        //  Socket.on('allnumbers', (data) => {
-        //     this.setState({
-        //         'numbers': data['numbers']
-        //     });
-        // })
+         Socket.on('all chats', (data) => {
+            this.setState({
+                'chats': data['chats'],
+                // 'users': data['users'],
+                // 'onlineNum': data['onlineNum'],
+            });
+        })
     }
 
     componentDidMount() {
-        Socket.on('all numbers', (data) => {
+        Socket.on('all chats', (data) => {
             this.setState({
-                'numbers': data['numbers']
+                'chats': data['chats'],
+                // 'users': data['users'],
+                // 'onlineNum': data['onlineNum'],
+                
             });
+            // console.log(this.);
+        
         })
+        
+        Socket.on('fbConn', (data) => {
+            this.setState({
+                'users': data['users'],
+                'onlineNum': data['onlineNum'],
+            });
+            
+        
+        })
+        
+        FB.getLoginStatus((response) => {            
+            if (response.status == 'connected') {                
+               console.log("logged in");
+            }        
+        });
         
         
         Socket.on('connectionLost', (data) => {
@@ -36,15 +62,22 @@ export class Content extends React.Component {
         })
     }
     // <p>{this.state.newPerson}</p> 
-// <p>{this.state.numbers}</p>
+// <p>{this.state.chats}</p>
     render() {
-        // let numbers = this.state.numbers.map(
+        // let chats = this.state.chats.map(
         //     (n, index) => <li key={index}>{n}</li>
         // );
-        let numbers = this.state.numbers.map((n, index) =>            
+        let chats = this.state.chats.map((n, index) =>            
             <li key={index}>                
                 <img src={n.picture} />                
-                {n.name}: {n.number}            
+                {n.name}: {n.chat}            
+            </li>        
+        );
+        let users = this.state.users.map((n, index) =>            
+            <li key={index}>     
+                Online ({this.state.onlineNum}):
+                <img src={n.picture} />                
+                {n.name}            
             </li>        
         );
         return (
@@ -61,8 +94,11 @@ export class Content extends React.Component {
                     data-show-faces="false"                   
                     data-auto-logout-link="true">                
                 </div>
+                <FacebookButton />
+                <Logout />
                 <Button />
-                <ul>{numbers}</ul>
+                <ul>{chats}</ul>
+                <ul>{users}</ul>
             </div>
         );
     }
