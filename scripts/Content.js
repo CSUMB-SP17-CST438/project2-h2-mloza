@@ -180,6 +180,14 @@ export class Content extends React.Component {
         //         <ul id="allChat">{testChat}</ul>
         //         <ul id="newChat">{chats}</ul>
         //         <ul id="onlineUsers">{testUser}</ul>
+        
+        // <div                    
+        //             className="fb-login-button"                    
+        //             data-max-rows="1"                    
+        //             data-size="medium"                    
+        //             data-show-faces="false"                   
+        //             data-auto-logout-link="true">                
+        //         </div>
         return (
             <div>
                 <Users />
@@ -187,13 +195,7 @@ export class Content extends React.Component {
                 
                 
                 <p>{this.state.personLeft}</p> 
-                <div                    
-                    className="fb-login-button"                    
-                    data-max-rows="1"                    
-                    data-size="medium"                    
-                    data-show-faces="false"                   
-                    data-auto-logout-link="true">                
-                </div>
+                
                 <FacebookButton />
                 <Logout />
                 
