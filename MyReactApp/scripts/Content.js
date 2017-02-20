@@ -33,9 +33,10 @@ export class Content extends React.Component {
     componentDidMount() {
         Socket.on('all chats', (data) => {
             this.setState({
-                'chats': data['chats'],
+                // 'chats': data['chats'],
                 // 'users': data['users'],
                 // 'onlineNum': data['onlineNum'],
+                'testChat': data['chats'],
                 
             });
             // console.log(this.);
@@ -137,10 +138,11 @@ export class Content extends React.Component {
                 <FacebookButton />
                 <Logout />
                 <Button />
-                <ul>{chats}</ul>
+                
                 <ul>{users}</ul>
-                <ul>{testChat}</ul>
-                <ul>{testUser}</ul>
+                <ul id="allChat">{testChat}</ul>
+                <ul id="newChat">{chats}</ul>
+                <ul id="onlineUsers">{testUser}</ul>
             </div>
         );
     }

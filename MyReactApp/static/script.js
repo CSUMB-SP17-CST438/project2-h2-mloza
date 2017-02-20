@@ -13155,7 +13155,11 @@ var Content = exports.Content = function (_React$Component) {
 
             _Socket.Socket.on('all chats', function (data) {
                 _this2.setState({
-                    'chats': data['chats']
+                    // 'chats': data['chats'],
+                    // 'users': data['users'],
+                    // 'onlineNum': data['onlineNum'],
+                    'testChat': data['chats']
+
                 });
                 // console.log(this.);
             });
@@ -13278,21 +13282,21 @@ var Content = exports.Content = function (_React$Component) {
                 React.createElement(
                     'ul',
                     null,
-                    chats
-                ),
-                React.createElement(
-                    'ul',
-                    null,
                     users
                 ),
                 React.createElement(
                     'ul',
-                    null,
+                    { id: 'allChat' },
                     testChat
                 ),
                 React.createElement(
                     'ul',
-                    null,
+                    { id: 'newChat' },
+                    chats
+                ),
+                React.createElement(
+                    'ul',
+                    { id: 'onlineUsers' },
                     testUser
                 )
             );

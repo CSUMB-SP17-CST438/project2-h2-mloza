@@ -41,7 +41,7 @@ def on_connect():
         }, broadcast=True)
     # print " WHAT THE HELL???"
     chats = models.Message.query.all()
-    all_chats = []
+    del all_chats[:]
     for user in chats:
         all_chats.append({        
             'name': user.user,        
@@ -58,7 +58,7 @@ def on_connect():
     }, broadcast=True)
     
     users = models.Users.query.all()
-    all_online_users = []
+    del all_online_users[:]
     for user in users:
         all_online_users.append({        
             'name': user.user,        
@@ -150,6 +150,7 @@ def fbConnection(data):
     
     users = models.Users.query.all()
     all_online_users = []
+    del all_online_users[:]
     for user in users:
         all_online_users.append({        
             'name': user.user,        
@@ -186,7 +187,8 @@ def fbDisconnection(data):
     models.db.session.commit()
     
     users = models.Users.query.all()
-    all_online_users = []
+    # all_online_users = []
+    del all_online_users[:]
     for user in users:
         all_online_users.append({        
             'name': user.user,        
@@ -212,5 +214,4 @@ if __name__ == '__main__':  # __name__!
         port=int(os.getenv('PORT', 8080)),
         debug=True
     )
-
 
