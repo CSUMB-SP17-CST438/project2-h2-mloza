@@ -13313,6 +13313,14 @@ var Content = exports.Content = function (_React$Component) {
             //         <ul id="allChat">{testChat}</ul>
             //         <ul id="newChat">{chats}</ul>
             //         <ul id="onlineUsers">{testUser}</ul>
+
+            // <div                    
+            //             className="fb-login-button"                    
+            //             data-max-rows="1"                    
+            //             data-size="medium"                    
+            //             data-show-faces="false"                   
+            //             data-auto-logout-link="true">                
+            //         </div>
             return React.createElement(
                 'div',
                 null,
@@ -13327,12 +13335,6 @@ var Content = exports.Content = function (_React$Component) {
                     null,
                     this.state.personLeft
                 ),
-                React.createElement('div', {
-                    className: 'fb-login-button',
-                    'data-max-rows': '1',
-                    'data-size': 'medium',
-                    'data-show-faces': 'false',
-                    'data-auto-logout-link': 'true' }),
                 React.createElement(_FacebookButton.FacebookButton, null),
                 React.createElement(_Logout.Logout, null),
                 React.createElement(
