@@ -63,6 +63,9 @@ export class Content extends React.Component {
             this.setState({
                 'users': data['users'],
                 'onlineNum': data['onlineNum'],
+                
+                'testUser': data['users'],
+                'testOnlineNum': data['onlineNum'],
             });
             
         

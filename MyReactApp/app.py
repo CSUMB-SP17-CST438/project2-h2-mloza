@@ -144,9 +144,20 @@ def fbConnection(data):
     response = requests.get( 
     'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cpicture&access_token=' + data['facebook_user_token'])    
     json = response.json()
-    print "fb connected";
+    # print "fb connected";
     flag = False;
+    
+    
     users = models.Users.query.all()
+    all_online_users = []
+    for user in users:
+        all_online_users.append({        
+            'name': user.user,        
+            'picture': user.img,        
+            'fbID': user.fbID,   
+        })
+    
+    
     print "Logged in user: " + json['name']
     for user in users:
         print "pirnt: " + user.user;
@@ -157,6 +168,8 @@ def fbConnection(data):
                 'name': json['name'],        
                 'picture': json['picture']['data']['url'], 
             })
+        for usr in all_online_users:
+            print "all online: " + usr['name']
         usr = models.Users(json['picture']['data']['url'], json['id'], json['name'])
         models.db.session.add(usr)
         models.db.session.commit()

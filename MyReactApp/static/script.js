@@ -13176,7 +13176,10 @@ var Content = exports.Content = function (_React$Component) {
             _Socket.Socket.on('fbConn', function (data) {
                 _this2.setState({
                     'users': data['users'],
-                    'onlineNum': data['onlineNum']
+                    'onlineNum': data['onlineNum'],
+
+                    'testUser': data['users'],
+                    'testOnlineNum': data['onlineNum']
                 });
             });
 
