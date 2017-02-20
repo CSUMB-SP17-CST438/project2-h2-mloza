@@ -3,6 +3,8 @@ import flask
 import flask_socketio
 import requests
 import flask_sqlalchemy
+# from flask import jsonify
+from flask import request
 
 
 app = flask.Flask(__name__)
@@ -43,6 +45,9 @@ def on_connect():
     socketio.emit('connection', { 
         'connected': 'Guest has connected'
         }, broadcast=True)
+    print "SOMEONE CONNECTED"
+    print request.remote_addr
+    print request.headers.getlist("X-Forwarded-For")[0]
     # print " WHAT THE HELL???"
     chats = models.Message.query.all()
     del all_chats[:]
@@ -95,7 +100,7 @@ def on_disconnect():
         'disconnected': 'Guest has disconnected',
         'left': True,
         }, broadcast=True)
-    
+    print request.headers.getlist("X-Forwarded-For")[0]
         
         
     # clients-=1;
