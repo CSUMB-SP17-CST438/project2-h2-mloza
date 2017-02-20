@@ -19,6 +19,8 @@ export class Content extends React.Component {
             'testChat': [],
             'testUser': [],
             'testOnlineNum': 0,
+            'possibleOffline': [],
+            'chatBot': '',
         };
         // Socket.on('allchats', (data) => {
         //     this.setState({
@@ -42,6 +44,18 @@ export class Content extends React.Component {
             // console.log(this.);
         
         })
+        
+        // Socket.on('chatBot', (data) => {
+        //     this.setState({
+        //         // 'chats': data['chats'],
+        //         // 'users': data['users'],
+        //         // 'onlineNum': data['onlineNum'],
+        //         'chatBot': data['chatBot'],
+                
+        //     });
+        //     // console.log(this.);
+        
+        // })
         
         Socket.on('allchats', (data) => {
             this.setState({
@@ -84,7 +98,47 @@ export class Content extends React.Component {
             this.setState({
                 'personLeft': data['disconnected']
             });
+            
+            // FB.getLoginStatus((response) => {            
+            //     if (response.status == 'connected') {                
+            //       Socket.emit('onlineCurrUser', {                    
+            //         'userID': response.authResponse.userID,    
+                    
+            //     });
+            //     }        
+            // });
+              
+            
         })
+        
+        // Socket.on('onlineUsers', (data) => {
+        //   this.setState({
+        //         'possibleOffline': data['possible']
+        //     });
+        
+        //     console.log("first test");
+        
+        //     FB.getLoginStatus((response) => {            
+        //         if (response.status == 'connected') {                
+        //             for (i = 0; i < possibleOffline.length; i++) {
+        //                 console.log("testing loop");
+        //                 if (response.authResponse.userID == possibleOffline[i]) {
+        //                     Socket.emit('fbDisconnected', {                    
+        //                         'userID': response.authResponse.userID,
+        //                     });
+        //                     // FB.logout(function(response) {
+        //                     //   // user is now logged out
+        //                     // });
+        //                     console.log("DISCONNECTED");
+        //                 }
+        //             }
+        //         }
+        
+        //     }); 
+            
+        // })
+        
+        
     }
     // <p>{this.state.newPerson}</p> 
 // <p>{this.state.chats}</p>
@@ -121,6 +175,11 @@ export class Content extends React.Component {
                 {n.name}            
             </li>        
         );
+        
+        // <ul>{users}</ul>
+        //         <ul id="allChat">{testChat}</ul>
+        //         <ul id="newChat">{chats}</ul>
+        //         <ul id="onlineUsers">{testUser}</ul>
         return (
             <div>
                 <Users />
@@ -137,12 +196,11 @@ export class Content extends React.Component {
                 </div>
                 <FacebookButton />
                 <Logout />
-                <Button />
                 
-                <ul>{users}</ul>
+                
                 <ul id="allChat">{testChat}</ul>
-                <ul id="newChat">{chats}</ul>
-                <ul id="onlineUsers">{testUser}</ul>
+                <ul id="onlineUsers">{testUser}</ul>     
+                <Button />
             </div>
         );
     }

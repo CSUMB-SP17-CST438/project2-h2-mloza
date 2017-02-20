@@ -20,6 +20,10 @@ import models
 
 all_chats = [];
 all_online_users = [];
+all_possible_online_users = [];
+chatBotImg = 'https://lh4.googleusercontent.com/vnCZbUminSYgNXsQdiQffUnjXa0XMnIS0_rqkynkjZb5_dM8jVfvAN68MuCRRCC4HYYMxXgp=s50-h50-e365'
+# chatBotImg = 'http://a.deviantart.net/avatars/s/a/sandara.jpg'
+    
 @app.route('/')
 def hello():
     
@@ -88,12 +92,34 @@ def on_connect():
 def on_disconnect():
     print 'Someone disconnected!'
     socketio.emit('connectionLost', { 
-        'disconnected': 'Guest has disconnected'
+        'disconnected': 'Guest has disconnected',
+        'left': True,
         }, broadcast=True)
+    
+        
+        
     # clients-=1;
     # socketio.emit('broadcast',{ description: clients + ' clients connected!'});
     
-
+    
+# @socketio.on('onlineCurrUser')
+# def online_user(data):
+#     all_possible_online_users = all_online_users;
+    
+#     for pos in all_possible_online_users:
+#         print pos['fbID'] + " ID"
+        
+#     for user in all_possible_online_users:
+#         if user['fbID'] == data['userID']:
+#             all_possible_online_users.remove(data['userID'])
+    
+#     for pos in all_possible_online_users:
+#         print pos['fbID'] + " ID AFTER"
+    
+#     socketio.emit('onlineUsers', {                    
+#         'possible': all_possible_online_users,    
+        
+#     });
 
 
 
@@ -104,15 +130,51 @@ def on_new_chat(data):
     json = response.json()
     print json["id"]
     # print json.dumps(json, indent=2)
-    all_chats.append({        
+    
+    
+    if data['chat'].find("!!", 0, 2) != -1:
+        print " DRAGON "
+        if data['chat'].find("!! say", 0, 6) != -1:
+            botChat = data['chat'][7:]
+        else:
+            if data['chat'] == "!! about":
+                botChat = "Hello! I am Dragon-bot. This is a fun place to chat."
+            elif data['chat'] == "!! help":
+                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat"
+            elif data['chat'] == "!! rawr":
+                botChat = "RAAAAWR!!!"
+            elif data['chat'] == "!! eat":
+                botChat = "FREE FOOD! Thank you!"
+            else:
+                botChat = "Nope! Check out !! help"
+        all_chats.append({        
+            'name': 'Dragon-bot',        
+            'picture': chatBotImg,        
+            'chat': botChat,   
+        })
+        msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+        models.db.session.add(msg)
+        models.db.session.commit()
+        # socketio.emit('chatBot', { 
+        #     'chatBotMsg': botChat,
+        #     # 'users': all_online_users,
+        #     # 'onlineNum': len(all_online_users),
+        # })
+    else:
+        all_chats.append({        
         'name': json['name'],        
         'picture': json['picture']['data']['url'],        
         'chat': data['chat'],   
-    })
-    # print "image: " + json['picture']['data']['url']
-    msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'])
-    models.db.session.add(msg)
-    models.db.session.commit()
+        })
+        msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'])
+        models.db.session.add(msg)
+        models.db.session.commit()
+    socketio.emit('all chats', { 
+        'chats': all_chats,
+        # 'users': all_online_users,
+        # 'onlineNum': len(all_online_users),
+    }, broadcast=True)
+    
     # print "chat: " + data['chat'];
     # for num in all_chats:
     #     print num["chat"] + "yay"
@@ -130,11 +192,9 @@ def on_new_chat(data):
     print "Got an event for new number with data:", data
     # TODO: Fill me out!
     # all_chats.append(data['number'])
-    socketio.emit('all chats', { 
-        'chats': all_chats,
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
-        }, broadcast=True)
+    
+        
+    
     # socketio.emit('all numbers', { 
     #     'numbers': data['number']
     #     }, broadcast=True)
@@ -147,9 +207,24 @@ def fbConnection(data):
     # print "fb connected";
     flag = False;
     
+    botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
+    all_chats.append({        
+        'name': 'Dragon-bot',        
+        'picture': chatBotImg,        
+        'chat': botChat,   
+    })
+    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+    models.db.session.add(msg)
+    models.db.session.commit()
+    
+    socketio.emit('all chats', { 
+        'chats': all_chats,
+        # 'users': all_online_users,
+        # 'onlineNum': len(all_online_users),
+    }, broadcast=True)
     
     users = models.Users.query.all()
-    all_online_users = []
+    # all_online_users = []
     del all_online_users[:]
     for user in users:
         all_online_users.append({        
@@ -183,6 +258,7 @@ def fbConnection(data):
 def fbDisconnection(data):
     print "USERID: " + data['userID']
     offlineUser = models.Users.query.filter_by(fbID=data['userID']).first();
+    discUser = offlineUser.user;
     models.db.session.delete(offlineUser)
     models.db.session.commit()
     
@@ -199,6 +275,22 @@ def fbDisconnection(data):
     socketio.emit('allusers', { 
         'users': all_online_users,
         'onlineNum': len(all_online_users),
+        # 'users': all_online_users,
+        # 'onlineNum': len(all_online_users),
+    }, broadcast=True)
+    
+    botChat = 'Aww! ' + discUser + ' left us...'
+    all_chats.append({        
+        'name': 'Dragon-bot',        
+        'picture': chatBotImg,        
+        'chat': botChat,   
+    })
+    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+    models.db.session.add(msg)
+    models.db.session.commit()
+    
+    socketio.emit('all chats', { 
+        'chats': all_chats,
         # 'users': all_online_users,
         # 'onlineNum': len(all_online_users),
     }, broadcast=True)

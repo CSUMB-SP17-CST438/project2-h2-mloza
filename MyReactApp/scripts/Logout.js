@@ -7,24 +7,20 @@ export class Logout extends React.Component {
     super(props);
     this.state = {
         'buttonName': 'Facebook Logout',
+        
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   
+
   componentDidMount() {
-    //   FB.getLoginStatus((response) => {            
-    //     if (response.status == 'connected') {                
-    //       console.log("logged in");
-    //       this.setState({
-    //             'buttonName': 'Facebook Logout',
-    //         });
-        // } else  {
-        //     this.setState({
-        //         'buttonName': 'Facebook Login',
-        //     });
-        // }        
-    // }); 
+      
+      
+    
+    
+    
+    
   }
   
     handleSubmit(event) {

@@ -13135,7 +13135,9 @@ var Content = exports.Content = function (_React$Component) {
             'onlineNum': 0,
             'testChat': [],
             'testUser': [],
-            'testOnlineNum': 0
+            'testOnlineNum': 0,
+            'possibleOffline': [],
+            'chatBot': ''
         };
         // Socket.on('allchats', (data) => {
         //     this.setState({
@@ -13163,6 +13165,18 @@ var Content = exports.Content = function (_React$Component) {
                 });
                 // console.log(this.);
             });
+
+            // Socket.on('chatBot', (data) => {
+            //     this.setState({
+            //         // 'chats': data['chats'],
+            //         // 'users': data['users'],
+            //         // 'onlineNum': data['onlineNum'],
+            //         'chatBot': data['chatBot'],
+
+            //     });
+            //     // console.log(this.);
+
+            // })
 
             _Socket.Socket.on('allchats', function (data) {
                 _this2.setState({
@@ -13198,7 +13212,45 @@ var Content = exports.Content = function (_React$Component) {
                 _this2.setState({
                     'personLeft': data['disconnected']
                 });
+
+                // FB.getLoginStatus((response) => {            
+                //     if (response.status == 'connected') {                
+                //       Socket.emit('onlineCurrUser', {                    
+                //         'userID': response.authResponse.userID,    
+
+                //     });
+                //     }        
+                // });
+
             });
+
+            // Socket.on('onlineUsers', (data) => {
+            //   this.setState({
+            //         'possibleOffline': data['possible']
+            //     });
+
+            //     console.log("first test");
+
+            //     FB.getLoginStatus((response) => {            
+            //         if (response.status == 'connected') {                
+            //             for (i = 0; i < possibleOffline.length; i++) {
+            //                 console.log("testing loop");
+            //                 if (response.authResponse.userID == possibleOffline[i]) {
+            //                     Socket.emit('fbDisconnected', {                    
+            //                         'userID': response.authResponse.userID,
+            //                     });
+            //                     // FB.logout(function(response) {
+            //                     //   // user is now logged out
+            //                     // });
+            //                     console.log("DISCONNECTED");
+            //                 }
+            //             }
+            //         }
+
+            //     }); 
+
+            // })
+
         }
         // <p>{this.state.newPerson}</p> 
         // <p>{this.state.chats}</p>
@@ -13256,6 +13308,11 @@ var Content = exports.Content = function (_React$Component) {
                     n.name
                 );
             });
+
+            // <ul>{users}</ul>
+            //         <ul id="allChat">{testChat}</ul>
+            //         <ul id="newChat">{chats}</ul>
+            //         <ul id="onlineUsers">{testUser}</ul>
             return React.createElement(
                 'div',
                 null,
@@ -13278,12 +13335,6 @@ var Content = exports.Content = function (_React$Component) {
                     'data-auto-logout-link': 'true' }),
                 React.createElement(_FacebookButton.FacebookButton, null),
                 React.createElement(_Logout.Logout, null),
-                React.createElement(_Button.Button, null),
-                React.createElement(
-                    'ul',
-                    null,
-                    users
-                ),
                 React.createElement(
                     'ul',
                     { id: 'allChat' },
@@ -13291,14 +13342,10 @@ var Content = exports.Content = function (_React$Component) {
                 ),
                 React.createElement(
                     'ul',
-                    { id: 'newChat' },
-                    chats
-                ),
-                React.createElement(
-                    'ul',
                     { id: 'onlineUsers' },
                     testUser
-                )
+                ),
+                React.createElement(_Button.Button, null)
             );
         }
     }]);
@@ -13638,6 +13685,7 @@ var Logout = exports.Logout = function (_React$Component) {
 
         _this.state = {
             'buttonName': 'Facebook Logout'
+
         };
 
         _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -13646,20 +13694,7 @@ var Logout = exports.Logout = function (_React$Component) {
 
     _createClass(Logout, [{
         key: 'componentDidMount',
-        value: function componentDidMount() {
-            //   FB.getLoginStatus((response) => {            
-            //     if (response.status == 'connected') {                
-            //       console.log("logged in");
-            //       this.setState({
-            //             'buttonName': 'Facebook Logout',
-            //         });
-            // } else  {
-            //     this.setState({
-            //         'buttonName': 'Facebook Login',
-            //     });
-            // }        
-            // }); 
-        }
+        value: function componentDidMount() {}
     }, {
         key: 'handleSubmit',
         value: function handleSubmit(event) {
