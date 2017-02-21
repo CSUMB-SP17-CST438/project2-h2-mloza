@@ -36,6 +36,8 @@ export class Button extends React.Component {
         // console.log('Sent up the random number to server!');
     }
     
+    // <textarea value={this.state.value} onChange={this.handleChange} cols="30" rows="5" ></textarea>
+    
     handleChange(event) {
     this.setState({value: event.target.value});
   }
@@ -43,8 +45,8 @@ export class Button extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-            <textarea value={this.state.value} onChange={this.handleChange} cols="30" rows="5" ></textarea>
-            
+             
+                <input type="text" value={this.state.value} onChange={this.handleChange} />
                 <button>Send!</button>
             </form>
         );

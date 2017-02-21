@@ -13106,6 +13106,8 @@ var _Button = __webpack_require__(110);
 
 var _FacebookButton = __webpack_require__(111);
 
+var _GoogleButton = __webpack_require__(236);
+
 var _Logout = __webpack_require__(112);
 
 var _Socket = __webpack_require__(23);
@@ -13147,14 +13149,65 @@ var Content = exports.Content = function (_React$Component) {
         //         // 'onlineNum': data['onlineNum'],
         //     });
         // })
+        _this.signOut = _this.signOut.bind(_this);
 
         return _this;
     }
 
+    //     function signOut() {
+    //     var auth2 = gapi.auth2.getAuthInstance();
+    //     auth2.signOut().then(function () {
+    //       console.log('User signed out.');
+    //     });
+    //   }
+
+
     _createClass(Content, [{
+        key: 'signOut',
+        value: function signOut(e) {
+            e.preventDefault();
+            var auth2 = gapi.auth2.getAuthInstance();
+            console.log(auth2);
+            var user = auth2.currentUser.get();
+            if (user.isSignedIn()) {
+                console.log(auth2.currentUser.get().getId() + "id go");
+                var profile = auth2.currentUser.get().getBasicProfile();
+                console.log('ID dis: ' + profile.getId());
+            }
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+                //   console.log(auth2.currentUser.get().getId() + "id out");
+            });
+            if (user.isSignedIn()) {
+                console.log(auth2.currentUser.get().getId() + "id go");
+                var profile = auth2.currentUser.get().getBasicProfile();
+                console.log('ID dis: ' + profile.getId());
+            } else {
+                console.log("out");
+            }
+            console.log('The link was clicked.');
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
+
+            //         function signOut() {
+            //     var auth2 = gapi.auth2.getAuthInstance();
+            //     auth2.signOut().then(function () {
+            //       console.log('User signed out.');
+            //     });
+            //   }
+
+
+            //         gapi.signin2.render('g-signin2', {
+            //     'scope': 'https://www.googleapis.com/auth/plus.login',
+            //     'width': 200,
+            //     'height': 50,
+            //     'longtitle': true,
+            //     'theme': 'dark',
+            //     'onsuccess': this. onSignIn
+            //   });  
 
             _Socket.Socket.on('all chats', function (data) {
                 _this2.setState({
@@ -13245,6 +13298,26 @@ var Content = exports.Content = function (_React$Component) {
                     'testUser': data['users'],
                     'testOnlineNum': data['onlineNum']
                 });
+            });
+
+            _Socket.Socket.on('gConn', function (data) {
+                var user = data['auth2'].currentUser.get();
+                if (user.isSignedIn()) {
+                    console.log("working");
+                    console.log(data['auth2'].currentUser.get().getId() + "id go");
+                    var profile = data['auth2'].currentUser.get().getBasicProfile();
+                    console.log('ID: ' + profile.getId());
+                    console.log('Full Name: ' + profile.getName());
+                    console.log('Image URL: ' + profile.getImageUrl());
+                }
+                // this.setState({
+                //     'users': data['users'],
+                //     'onlineNum': data['onlineNum'],
+
+                //     'testUser': data['users'],
+                //     'testOnlineNum': data['onlineNum'],
+                // });
+
             });
 
             FB.getLoginStatus(function (response) {
@@ -13380,7 +13453,16 @@ var Content = exports.Content = function (_React$Component) {
                     this.state.personLeft
                 ),
                 React.createElement(_FacebookButton.FacebookButton, null),
+                React.createElement(_GoogleButton.GoogleButton, null),
                 React.createElement(_Logout.Logout, null),
+                React.createElement('div', {
+                    className: 'g-signin2',
+                    'data-theme': 'dark' }),
+                React.createElement(
+                    'a',
+                    { href: '#', onClick: this.signOut },
+                    'Sign out'
+                ),
                 React.createElement(
                     'div',
                     { id: 'chat' },
@@ -13574,6 +13656,9 @@ var Button = exports.Button = function (_React$Component) {
             // });
             // console.log('Sent up the random number to server!');
         }
+
+        // <textarea value={this.state.value} onChange={this.handleChange} cols="30" rows="5" ></textarea>
+
     }, {
         key: 'handleChange',
         value: function handleChange(event) {
@@ -13585,7 +13670,7 @@ var Button = exports.Button = function (_React$Component) {
             return React.createElement(
                 'form',
                 { onSubmit: this.handleSubmit },
-                React.createElement('textarea', { value: this.state.value, onChange: this.handleChange, cols: '30', rows: '5' }),
+                React.createElement('input', { type: 'text', value: this.state.value, onChange: this.handleChange }),
                 React.createElement(
                     'button',
                     null,
@@ -13639,6 +13724,7 @@ var FacebookButton = exports.FacebookButton = function (_React$Component) {
         };
 
         _this.handleSubmit = _this.handleSubmit.bind(_this);
+        _this.signIn = _this.signIn.bind(_this);
         return _this;
     }
 
@@ -13692,15 +13778,49 @@ var FacebookButton = exports.FacebookButton = function (_React$Component) {
             console.log('Sent up the chat to server!');
         }
     }, {
+        key: 'signIn',
+        value: function signIn(e) {
+            e.preventDefault();
+            var auth2 = gapi.auth2.getAuthInstance();
+            var user = auth2.currentUser.get();
+            if (user.isSignedIn()) {
+                console.log(auth2.currentUser.get().getId() + "id go");
+                var profile = auth2.currentUser.get().getBasicProfile();
+                console.log('ID: ' + profile.getId());
+                console.log('Full Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+
+                _Socket.Socket.emit('gConnected', {
+                    'google_user_token': user.getAuthResponse().id_token,
+                    'auth2': auth2
+                });
+            }
+            console.log(user);
+            auth2.signIn().then(function () {
+                console.log('User signed in.');
+            });
+
+            console.log('The link was clicked.');
+        }
+    }, {
         key: 'render',
         value: function render() {
             return React.createElement(
-                'form',
-                { onSubmit: this.handleSubmit },
+                'div',
+                null,
                 React.createElement(
-                    'button',
-                    { id: 'fbLogin' },
-                    this.state.buttonName
+                    'form',
+                    { onSubmit: this.handleSubmit },
+                    React.createElement(
+                        'button',
+                        { id: 'fbLogin' },
+                        this.state.buttonName
+                    )
+                ),
+                React.createElement(
+                    'a',
+                    { href: '#', onClick: this.signIn },
+                    'Sign in'
                 )
             );
         }
@@ -30806,6 +30926,97 @@ var _Content = __webpack_require__(105);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 ReactDOM.render(React.createElement(_Content.Content, null), document.getElementById('content'));
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.GoogleButton = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(18);
+
+var React = _interopRequireWildcard(_react);
+
+var _Socket = __webpack_require__(23);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var GoogleButton = exports.GoogleButton = function (_React$Component) {
+    _inherits(GoogleButton, _React$Component);
+
+    function GoogleButton(props) {
+        _classCallCheck(this, GoogleButton);
+
+        var _this = _possibleConstructorReturn(this, (GoogleButton.__proto__ || Object.getPrototypeOf(GoogleButton)).call(this, props));
+
+        _this.state = {
+            'buttonName': 'Google Login'
+        };
+
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
+    }
+
+    _createClass(GoogleButton, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {}
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(event) {
+            event.preventDefault();
+
+            var auth2 = gapi.auth2.getAuthInstance();
+            var user = auth2.currentUser.get();
+            if (user.isSignedIn()) {
+                console.log(auth2.currentUser.get().getId() + "id go");
+                var profile = auth2.currentUser.get().getBasicProfile();
+                console.log('ID: ' + profile.getId());
+                console.log('Full Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+
+                _Socket.Socket.emit('gConnected', {
+                    'google_user_token': user.getAuthResponse().id_token
+                });
+            }
+            console.log(user);
+            auth2.signIn().then(function () {
+                console.log('User signed in.');
+            });
+
+            console.log('The link was clicked.');
+            console.log('Sent up the chat to server!');
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'form',
+                { onSubmit: this.handleSubmit },
+                React.createElement(
+                    'button',
+                    { id: 'gLogin' },
+                    this.state.buttonName
+                )
+            );
+        }
+    }]);
+
+    return GoogleButton;
+}(React.Component);
 
 /***/ })
 /******/ ]);

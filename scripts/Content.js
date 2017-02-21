@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Users } from './Users';
 import { Button } from './Button';
 import { FacebookButton } from './FacebookButton';
+import { GoogleButton } from './GoogleButton';
 import { Logout } from './Logout';
 import { Socket } from './Socket';
 
@@ -30,10 +31,65 @@ export class Content extends React.Component {
         //         // 'onlineNum': data['onlineNum'],
         //     });
         // })
+        this.signOut = this.signOut.bind(this);
          
     }
+    
+//     function signOut() {
+//     var auth2 = gapi.auth2.getAuthInstance();
+//     auth2.signOut().then(function () {
+//       console.log('User signed out.');
+//     });
+//   }
+
+
+signOut(e) {
+    e.preventDefault();
+    var auth2 = gapi.auth2.getAuthInstance();
+    console.log(auth2);
+    let user = auth2.currentUser.get();
+    if (user.isSignedIn()) {  
+        console.log(auth2.currentUser.get().getId() + "id go");
+        var profile = auth2.currentUser.get().getBasicProfile();
+        console.log('ID dis: ' + profile.getId());         
+        
+    } 
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    //   console.log(auth2.currentUser.get().getId() + "id out");
+    });
+    if (user.isSignedIn()) {  
+        console.log(auth2.currentUser.get().getId() + "id go");
+        var profile = auth2.currentUser.get().getBasicProfile();
+        console.log('ID dis: ' + profile.getId());         
+        
+    } else {
+        console.log("out");
+    }
+    console.log('The link was clicked.');
+  }
 
     componentDidMount() {
+        
+        
+        
+//         function signOut() {
+//     var auth2 = gapi.auth2.getAuthInstance();
+//     auth2.signOut().then(function () {
+//       console.log('User signed out.');
+//     });
+//   }
+
+        
+//         gapi.signin2.render('g-signin2', {
+//     'scope': 'https://www.googleapis.com/auth/plus.login',
+//     'width': 200,
+//     'height': 50,
+//     'longtitle': true,
+//     'theme': 'dark',
+//     'onsuccess': this. onSignIn
+//   });  
+        
         Socket.on('all chats', (data) => {
             this.setState({
                 // 'chats': data['chats'],
@@ -135,6 +191,29 @@ export class Content extends React.Component {
         
         })
         
+        Socket.on('gConn', (data) => {
+            let user = data['auth2'].currentUser.get();
+            if (user.isSignedIn()) {  
+                console.log("working");
+                console.log(data['auth2'].currentUser.get().getId() + "id go");
+                var profile = data['auth2'].currentUser.get().getBasicProfile();
+                console.log('ID: ' + profile.getId());
+                console.log('Full Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                       
+                
+            } 
+            // this.setState({
+            //     'users': data['users'],
+            //     'onlineNum': data['onlineNum'],
+                
+            //     'testUser': data['users'],
+            //     'testOnlineNum': data['onlineNum'],
+            // });
+            
+        
+        })
+        
         FB.getLoginStatus((response) => {            
             if (response.status == 'connected') {                
                console.log("logged in");
@@ -159,6 +238,7 @@ export class Content extends React.Component {
               
             
         })
+        
         
         // Socket.on('onlineUsers', (data) => {
         //   this.setState({
@@ -246,8 +326,16 @@ export class Content extends React.Component {
                 <p>{this.state.personLeft}</p> 
                 
                 <FacebookButton />
+                <GoogleButton />
                 <Logout />
-                
+                <div 
+                    className="g-signin2" 
+                    data-theme="dark"> 
+                </div>
+                <a href="#" onClick={this.signOut}>Sign out</a>
+
+               
+
                 
                     <div id="chat">
                         <ul id="allChat">{testChat}</ul>

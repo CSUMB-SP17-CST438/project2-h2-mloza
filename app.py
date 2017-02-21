@@ -343,6 +343,16 @@ def fbConnection(data):
         'onlineNum': len(all_online_users),
         }, broadcast=True)
         
+
+@socketio.on('gConnected')
+def gConnection(data):
+    print "test"
+    print data['google_user_token'] + " google"
+    socketio.emit('gConn', { 
+        # 'users': all_online_users,
+        'auth2': data['auth2'],
+        })
+        
 @socketio.on('fbDisconnected')
 def fbDisconnection(data):
     print "USERID: " + data['userID']
