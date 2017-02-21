@@ -13137,7 +13137,8 @@ var Content = exports.Content = function (_React$Component) {
             'testUser': [],
             'testOnlineNum': 0,
             'possibleOffline': [],
-            'chatBot': ''
+            'chatBot': '',
+            'guestNu': 0
         };
         // Socket.on('allchats', (data) => {
         //     this.setState({
@@ -13162,6 +13163,51 @@ var Content = exports.Content = function (_React$Component) {
                     // 'onlineNum': data['onlineNum'],
                     'testChat': data['chats']
 
+                });
+                // console.log(this.);
+            });
+
+            _Socket.Socket.on('guestCo', function (data) {
+                _this2.setState({
+                    // 'chats': data['chats'],
+                    // 'users': data['users'],
+                    // 'onlineNum': data['onlineNum'],
+                    'guestNu': _this2.state.guestNu + 1
+
+                });
+                // console.log(this.);
+            });
+
+            _Socket.Socket.on('guestDis', function (data) {
+                _this2.setState({
+                    // 'chats': data['chats'],
+                    // 'users': data['users'],
+                    // 'onlineNum': data['onlineNum'],
+                    'guestNu': _this2.state.guestNu - 1
+
+                });
+                // console.log(this.);
+            });
+
+            _Socket.Socket.on('left', function (data) {
+                // this.setState({
+                //     'guestNu': this.state.guestNu - 1,
+
+                // });
+                FB.getLoginStatus(function (response) {
+                    if (response.status == 'connected') {
+                        // userID = response.authResponse.userID;
+                        //   console.log(response.authResponse.userID);
+                        //   console.log(response.authResponse.accessToken);
+                        _Socket.Socket.emit('fbDisconnected', {
+                            'userID': data['user']
+                        });
+                        console.log("test");
+                    }
+                });
+
+                FB.logout(function (response) {
+                    // user is now logged out
                 });
                 // console.log(this.);
             });
@@ -13279,7 +13325,6 @@ var Content = exports.Content = function (_React$Component) {
                     'li',
                     { key: index },
                     React.createElement('img', { src: n.picture }),
-                    'Test',
                     n.name,
                     ': ',
                     n.chat
@@ -13289,9 +13334,6 @@ var Content = exports.Content = function (_React$Component) {
                 return React.createElement(
                     'li',
                     { key: index },
-                    'Online now (',
-                    _this3.state.testOnlineNum,
-                    '):',
                     React.createElement('img', { src: n.picture }),
                     n.name
                 );
@@ -13321,6 +13363,8 @@ var Content = exports.Content = function (_React$Component) {
             //             data-show-faces="false"                   
             //             data-auto-logout-link="true">                
             //         </div>
+
+            // <p>Guests({this.state.guestNu})</p>
             return React.createElement(
                 'div',
                 null,
@@ -13328,7 +13372,7 @@ var Content = exports.Content = function (_React$Component) {
                 React.createElement(
                     'h1',
                     null,
-                    'Random numbers so far! Yay!'
+                    'Chating...'
                 ),
                 React.createElement(
                     'p',
@@ -13338,15 +13382,31 @@ var Content = exports.Content = function (_React$Component) {
                 React.createElement(_FacebookButton.FacebookButton, null),
                 React.createElement(_Logout.Logout, null),
                 React.createElement(
-                    'ul',
-                    { id: 'allChat' },
-                    testChat
+                    'div',
+                    { id: 'chat' },
+                    React.createElement(
+                        'ul',
+                        { id: 'allChat' },
+                        testChat
+                    )
                 ),
                 React.createElement(
-                    'ul',
-                    { id: 'onlineUsers' },
-                    testUser
+                    'div',
+                    { id: 'users' },
+                    React.createElement(
+                        'p',
+                        { id: 'noMarg' },
+                        'Online now (',
+                        this.state.testOnlineNum,
+                        '): '
+                    ),
+                    React.createElement(
+                        'ul',
+                        { id: 'onlineUsers' },
+                        testUser
+                    )
                 ),
+                React.createElement('div', { id: 'clear' }),
                 React.createElement(_Button.Button, null)
             );
         }
@@ -13525,7 +13585,7 @@ var Button = exports.Button = function (_React$Component) {
             return React.createElement(
                 'form',
                 { onSubmit: this.handleSubmit },
-                React.createElement('input', { type: 'text', value: this.state.value, onChange: this.handleChange }),
+                React.createElement('textarea', { value: this.state.value, onChange: this.handleChange, cols: '30', rows: '5' }),
                 React.createElement(
                     'button',
                     null,
@@ -13639,7 +13699,7 @@ var FacebookButton = exports.FacebookButton = function (_React$Component) {
                 { onSubmit: this.handleSubmit },
                 React.createElement(
                     'button',
-                    null,
+                    { id: 'fbLogin' },
                     this.state.buttonName
                 )
             );
@@ -13726,7 +13786,7 @@ var Logout = exports.Logout = function (_React$Component) {
                 { onSubmit: this.handleSubmit },
                 React.createElement(
                     'button',
-                    null,
+                    { id: 'fbLogout' },
                     this.state.buttonName
                 )
             );

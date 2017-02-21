@@ -24,9 +24,19 @@ class Users(db.Model):
     img = db.Column(db.String(150))
     fbID = db.Column(db.String(150))
     user = db.Column(db.String(120))
-    def __init__(self, i, f, u):
+    ip = db.Column(db.String(120))
+    def __init__(self, i, f, u, p):
         self.img = i
         self.fbID = f
         self.user = u
+        self.ip = p
     def __repr__(self): # what's __repr__?
         return '<Users name: %s>' % self.user
+        
+class ipAddr(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # key
+    ip = db.Column(db.String(120))
+    def __init__(self, p):
+        self.ip = p
+    def __repr__(self): # what's __repr__?
+        return '<ipAddr ip: %s>' % self.ip

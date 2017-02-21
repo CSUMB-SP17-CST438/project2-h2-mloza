@@ -7,6 +7,7 @@ import flask_sqlalchemy
 from flask import request
 
 
+
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
 
@@ -20,6 +21,7 @@ import models
 
 # clients = 0;
 
+ip = [];
 all_chats = [];
 all_online_users = [];
 all_possible_online_users = [];
@@ -46,9 +48,50 @@ def on_connect():
         'connected': 'Guest has connected'
         }, broadcast=True)
     print "SOMEONE CONNECTED"
-    print request.remote_addr
-    print request.headers.getlist("X-Forwarded-For")[0]
-    # print " WHAT THE HELL???"
+    # print request.sid
+    # print request.remote_addr
+    # print request.headers.getlist("X-Forwarded-For")[0]
+    # # print " WHAT THE HELL???"
+    
+    # flagIP = False;
+    # ips = models.ipAddr.query.all()
+    # for usrs in ips:
+    #     if (usrs.ip == request.sid):
+    #         flagIP = True;
+    # if (flagIP == False):
+    #     ips.append({
+    #             'ip': request.sid,  
+    #         })
+    #     users = models.Users.query.all()
+    #     flagC = False;
+    #     for u in users:
+    #         if u.ip == request.sid:
+    #             flagC = True;
+    #     if  flagC == False:
+    #         all_chats.append({        
+    #             'name': 'Dragon-bot',        
+    #             'picture': chatBotImg,        
+    #             'chat': 'Watch out! Guest has connected!',   
+    #         })
+    #         msg = models.Message(chatBotImg, '1', 'Dragon-bot', 'Watch out! Guest has connected!')
+    #         models.db.session.add(msg)
+    #         models.db.session.commit()
+            
+    #     socketio.emit('all chats', { 
+    #         'chats': all_chats,
+    #         # 'users': all_online_users,
+    #         # 'onlineNum': len(all_online_users),
+    #     }, broadcast=True)
+    #     socketio.emit('guestCo', { 
+    #         # 'users': all_online_users,
+    #         # 'onlineNum': len(all_online_users),
+    #     }, broadcast=True)
+    #     msg = models.ipAddr(request.sid)
+    #     models.db.session.add(msg)
+    #     models.db.session.commit()
+    
+    
+    
     chats = models.Message.query.all()
     del all_chats[:]
     for user in chats:
@@ -96,11 +139,45 @@ def on_connect():
 @socketio.on('disconnect')
 def on_disconnect():
     print 'Someone disconnected!'
-    socketio.emit('connectionLost', { 
-        'disconnected': 'Guest has disconnected',
-        'left': True,
-        }, broadcast=True)
-    print request.headers.getlist("X-Forwarded-For")[0]
+    
+    # print request.sid
+    users = models.Users.query.all()
+    
+    for u in users:
+        if u.ip == request.sid:
+            
+            print u.user + " disconnected"
+            print u.fbID;
+            socketio.emit('left', { 
+                'user': u.fbID,
+                # 'disconnected': 'Guest has disconnected',
+                # 'left': True,
+                })
+        
+    #     all_possible_online_users.append(u.ip);
+    
+    # # for pos in all_possible_online_users:
+    # #     print pos["ip"] + " ID"
+        
+    # for i in range(len(all_possible_online_users)):
+    #     print all_possible_online_users[i] + "ID"
+        
+    # online = False;
+    # for i in range(len(all_possible_online_users)):
+    #     print all_possible_online_users[i] + "ID during"
+    #     if all_possible_online_users[i] == request.sid:
+    #         all_possible_online_users.remove(request.sid)
+    
+    print "DISCONNECTED: " + request.sid
+        
+    
+    # for i in range(len(all_possible_online_users)):
+    #     print all_possible_online_users[i] + "ID AFTER"
+    
+    # socketio.emit('connectionLost', { 
+    #     'disconnected': 'Guest has disconnected',
+    #     'left': True,
+    #     }, broadcast=True)
         
         
     # clients-=1;
@@ -212,6 +289,8 @@ def fbConnection(data):
     # print "fb connected";
     flag = False;
     
+    
+    
     botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
     all_chats.append({        
         'name': 'Dragon-bot',        
@@ -227,6 +306,11 @@ def fbConnection(data):
         # 'users': all_online_users,
         # 'onlineNum': len(all_online_users),
     }, broadcast=True)
+    
+    socketio.emit('guestDis', { 
+            # 'users': all_online_users,
+            # 'onlineNum': len(all_online_users),
+        }, broadcast=True)
     
     users = models.Users.query.all()
     # all_online_users = []
@@ -247,11 +331,11 @@ def fbConnection(data):
     if (flag == False):
         all_online_users.append({
                 'name': json['name'],        
-                'picture': json['picture']['data']['url'], 
+                'picture': json['picture']['data']['url'],
             })
         for usr in all_online_users:
             print "all online: " + usr['name']
-        usr = models.Users(json['picture']['data']['url'], json['id'], json['name'])
+        usr = models.Users(json['picture']['data']['url'], json['id'], json['name'], request.sid)
         models.db.session.add(usr)
         models.db.session.commit()
     socketio.emit('fbConn', { 

@@ -48,7 +48,7 @@ export class Logout extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <button>{this.state.buttonName}</button>
+                <button id="fbLogout">{this.state.buttonName}</button>
             </form>
         );
     }

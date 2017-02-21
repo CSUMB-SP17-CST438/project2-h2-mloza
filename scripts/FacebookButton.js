@@ -64,7 +64,7 @@ export class FacebookButton extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <button>{this.state.buttonName}</button>
+                <button id="fbLogin">{this.state.buttonName}</button>
             </form>
         );
     }

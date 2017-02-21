@@ -43,7 +43,8 @@ export class Button extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
+            <textarea value={this.state.value} onChange={this.handleChange} cols="30" rows="5" ></textarea>
+            
                 <button>Send!</button>
             </form>
         );

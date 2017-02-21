@@ -21,6 +21,7 @@ export class Content extends React.Component {
             'testOnlineNum': 0,
             'possibleOffline': [],
             'chatBot': '',
+            'guestNu': 0,
         };
         // Socket.on('allchats', (data) => {
         //     this.setState({
@@ -40,6 +41,54 @@ export class Content extends React.Component {
                 // 'onlineNum': data['onlineNum'],
                 'testChat': data['chats'],
                 
+            });
+            // console.log(this.);
+        
+        })
+        
+        Socket.on('guestCo', (data) => {
+            this.setState({
+                // 'chats': data['chats'],
+                // 'users': data['users'],
+                // 'onlineNum': data['onlineNum'],
+                'guestNu': this.state.guestNu + 1,
+                
+            });
+            // console.log(this.);
+        
+        })
+        
+        Socket.on('guestDis', (data) => {
+            this.setState({
+                // 'chats': data['chats'],
+                // 'users': data['users'],
+                // 'onlineNum': data['onlineNum'],
+                'guestNu': this.state.guestNu - 1,
+                
+            });
+            // console.log(this.);
+        
+        })
+        
+        Socket.on('left', (data) => {
+            // this.setState({
+            //     'guestNu': this.state.guestNu - 1,
+                
+            // });
+            FB.getLoginStatus((response) => {            
+                if (response.status == 'connected') {  
+                // userID = response.authResponse.userID;
+                //   console.log(response.authResponse.userID);
+                //   console.log(response.authResponse.accessToken);
+                    Socket.emit('fbDisconnected', {                    
+                        'userID': data['user'],
+                    });
+                  console.log("test");
+                }        
+            });
+            
+            FB.logout(function(response) {
+              // user is now logged out
             });
             // console.log(this.);
         
@@ -156,13 +205,11 @@ export class Content extends React.Component {
         let testChat = this.state.testChat.map((n, index) =>            
             <li key={index}>                
                 <img src={n.picture} />   
-                Test
                 {n.name}: {n.chat}            
             </li>        
         );
         let testUser = this.state.testUser.map((n, index) =>            
             <li key={index}>     
-                Online now ({this.state.testOnlineNum}):
                 <img src={n.picture} />                
                 {n.name}            
             </li>        
@@ -188,10 +235,12 @@ export class Content extends React.Component {
         //             data-show-faces="false"                   
         //             data-auto-logout-link="true">                
         //         </div>
+        
+        // <p>Guests({this.state.guestNu})</p>
         return (
             <div>
                 <Users />
-                <h1>Random numbers so far! Yay!</h1>
+                <h1>Chating...</h1>
                 
                 
                 <p>{this.state.personLeft}</p> 
@@ -200,8 +249,17 @@ export class Content extends React.Component {
                 <Logout />
                 
                 
-                <ul id="allChat">{testChat}</ul>
-                <ul id="onlineUsers">{testUser}</ul>     
+                    <div id="chat">
+                        <ul id="allChat">{testChat}</ul>
+                    </div>
+                    <div id="users">
+                        <p id="noMarg">Online now ({this.state.testOnlineNum}): </p>
+                        <ul id="onlineUsers">{testUser}</ul>  
+                    </div>
+                    <div id="clear"></div>
+            
+                
+                
                 <Button />
             </div>
         );
