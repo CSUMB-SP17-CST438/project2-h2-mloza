@@ -13209,27 +13209,6 @@ var Content = exports.Content = function (_React$Component) {
         key: 'render',
         value: function render() {
 
-            var isFbLoggedIn = this.state.fbLoginFlag;
-            var isGLoggedIn = this.state.gLoginFlag;
-
-            var buttonFLogin = null;
-            var buttonGLogin = null;
-            var buttonFLogout = null;
-            var buttonGLogout = null;
-            if (isFbLoggedIn == false || isGLoggedIn == false) {
-                buttonFLogin = React.createElement(_FacebookButton.FacebookButton, null);
-                buttonGLogin = React.createElement(_GoogleButton.GoogleButton, null);
-            }
-            if (isFbLoggedIn) {
-                buttonFLogout = React.createElement(_Logout.Logout, null);
-                buttonFLogin = null;
-                buttonGLogin = null;
-            } else if (isGLoggedIn) {
-                buttonGLogout = React.createElement(_LogoutGoogle.LogoutGoogle, null);
-                buttonFLogin = null;
-                buttonGLogin = null;
-            }
-
             var testChat = this.state.testChat.map(function (n, index) {
                 return React.createElement(
                     'li',
@@ -13257,10 +13236,10 @@ var Content = exports.Content = function (_React$Component) {
                     null,
                     'Chatting...'
                 ),
-                buttonFLogin,
-                buttonGLogin,
-                buttonFLogout,
-                buttonGLogout,
+                React.createElement(_FacebookButton.FacebookButton, null),
+                React.createElement(_GoogleButton.GoogleButton, null),
+                React.createElement(_Logout.Logout, null),
+                React.createElement(_LogoutGoogle.LogoutGoogle, null),
                 React.createElement(
                     'div',
                     { id: 'chat' },
