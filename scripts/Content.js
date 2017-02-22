@@ -5,6 +5,7 @@ import { Button } from './Button';
 import { FacebookButton } from './FacebookButton';
 import { GoogleButton } from './GoogleButton';
 import { Logout } from './Logout';
+import { LogoutGoogle } from './LogoutGoogle';
 import { Socket } from './Socket';
 
 export class Content extends React.Component {
@@ -31,7 +32,6 @@ export class Content extends React.Component {
         //         // 'onlineNum': data['onlineNum'],
         //     });
         // })
-        this.signOut = this.signOut.bind(this);
          
     }
     
@@ -43,31 +43,7 @@ export class Content extends React.Component {
 //   }
 
 
-signOut(e) {
-    e.preventDefault();
-    var auth2 = gapi.auth2.getAuthInstance();
-    console.log(auth2);
-    let user = auth2.currentUser.get();
-    if (user.isSignedIn()) {  
-        console.log(auth2.currentUser.get().getId() + "id go");
-        var profile = auth2.currentUser.get().getBasicProfile();
-        console.log('ID dis: ' + profile.getId());         
-        
-    } 
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    //   console.log(auth2.currentUser.get().getId() + "id out");
-    });
-    if (user.isSignedIn()) {  
-        console.log(auth2.currentUser.get().getId() + "id go");
-        var profile = auth2.currentUser.get().getBasicProfile();
-        console.log('ID dis: ' + profile.getId());         
-        
-    } else {
-        console.log("out");
-    }
-    console.log('The link was clicked.');
-  }
+
 
     componentDidMount() {
         
@@ -191,15 +167,17 @@ signOut(e) {
         
         })
         
+        
+        
         Socket.on('gConn', (data) => {
             let user = data['auth2'].currentUser.get();
             if (user.isSignedIn()) {  
                 console.log("working");
-                console.log(data['auth2'].currentUser.get().getId() + "id go");
-                var profile = data['auth2'].currentUser.get().getBasicProfile();
-                console.log('ID: ' + profile.getId());
-                console.log('Full Name: ' + profile.getName());
-                console.log('Image URL: ' + profile.getImageUrl());
+                // console.log(data['auth2'].currentUser.get().getId() + "id go");
+                // var profile = data['auth2'].currentUser.get().getBasicProfile();
+                // console.log('ID: ' + profile.getId());
+                // console.log('Full Name: ' + profile.getName());
+                // console.log('Image URL: ' + profile.getImageUrl());
                        
                 
             } 
@@ -328,11 +306,11 @@ signOut(e) {
                 <FacebookButton />
                 <GoogleButton />
                 <Logout />
+                <LogoutGoogle />
                 <div 
                     className="g-signin2" 
                     data-theme="dark"> 
                 </div>
-                <a href="#" onClick={this.signOut}>Sign out</a>
 
                
 

@@ -344,14 +344,27 @@ def fbConnection(data):
         }, broadcast=True)
         
 
-@socketio.on('gConnected')
+@socketio.on('gConnect')
 def gConnection(data):
+    response = requests.get( 
+    'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_user_token'])    
+    json = response.json()
+    print json["email"] + " email?"
     print "test"
-    print data['google_user_token'] + " google"
-    socketio.emit('gConn', { 
-        # 'users': all_online_users,
-        'auth2': data['auth2'],
-        })
+    # print data['google_user_token'] + " google"
+    print "Got an event for new number with data:", data
+    # socketio.emit('gConn', { 
+    #     # 'users': all_online_users,
+    #     # 'auth2': data['auth2'],
+    #     })
+    
+@socketio.on('gLoggedIn')
+def gLog(data):
+    print " GOOOOOOGLE"
+    print data['gUser']
+    socketio.emit('gLoggedInBack', {
+            'gUser': data['gUser'],
+        });
         
 @socketio.on('fbDisconnected')
 def fbDisconnection(data):
