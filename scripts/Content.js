@@ -114,26 +114,8 @@ export class Content extends React.Component {
     
     render() {
         
-        const isFbLoggedIn = this.state.fbLoginFlag;
-        const isGLoggedIn = this.state.gLoginFlag;
 
-        let buttonFLogin = null;
-        let buttonGLogin = null;
-        let buttonFLogout = null;
-        let buttonGLogout = null;
-        if (isFbLoggedIn == false || isGLoggedIn == false) {
-          buttonFLogin = <FacebookButton />;
-          buttonGLogin = <GoogleButton />;
-        } 
-        if (isFbLoggedIn) {
-              buttonFLogout = <Logout />;
-              buttonFLogin = null;
-               buttonGLogin = null;
-          } else if (isGLoggedIn) {
-              buttonGLogout = <LogoutGoogle />;
-               buttonFLogin = null;
-                buttonGLogin = null;
-          }
+        
         
         let testChat = this.state.testChat.map((n, index) =>            
             <li key={index}>                
