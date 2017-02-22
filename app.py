@@ -393,9 +393,14 @@ def gConnection(data):
             })
         for usr in all_online_users:
             print "all online: " + usr['name']
-        usr = models.Users(json['picture']['data']['url'], json['id'], json['name'], request.sid)
+        usr = models.Users(json['picture'], 'Google', json['name'], request.sid)
         models.db.session.add(usr)
         models.db.session.commit()
+        
+        socketio.emit('gConn', { 
+        'users': all_online_users,
+        'onlineNum': len(all_online_users),
+        }, broadcast=True)
     
     # socketio.emit('gConn', { 
     #     # 'users': all_online_users,

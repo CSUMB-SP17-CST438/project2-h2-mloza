@@ -13277,16 +13277,12 @@ var Content = exports.Content = function (_React$Component) {
             });
 
             _Socket.Socket.on('gConn', function (data) {
-                var user = data['auth2'].currentUser.get();
-                if (user.isSignedIn()) {
-                    console.log("working");
-                    // console.log(data['auth2'].currentUser.get().getId() + "id go");
-                    // var profile = data['auth2'].currentUser.get().getBasicProfile();
-                    // console.log('ID: ' + profile.getId());
-                    // console.log('Full Name: ' + profile.getName());
-                    // console.log('Image URL: ' + profile.getImageUrl());
 
-                }
+                _this2.setState({
+                    'testUser': data['users'],
+                    'testOnlineNum': data['onlineNum']
+                });
+
                 // this.setState({
                 //     'users': data['users'],
                 //     'onlineNum': data['onlineNum'],
