@@ -155,11 +155,11 @@ export class Content extends React.Component {
                 
                 
                 
-                {buttonFLogin}
-                {buttonGLogin}
+                <FacebookButton />
+                <GoogleButton />
                 
-                {buttonFLogout}
-                {buttonGLogout}
+                <Logout />
+                <LogoutGoogle />
                 
 
                
