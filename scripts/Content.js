@@ -15,6 +15,8 @@ export class Content extends React.Component {
             'testChat': [],
             'testUser': [],
             'testOnlineNum': 0,
+            'fbLoginFlag': false,
+            'gLoginFlag': false,
         };
          
     }
@@ -24,10 +26,29 @@ export class Content extends React.Component {
     componentDidMount() {
         
         
-       
-
         
-
+        Socket.on('logFB', (data) => {
+            this.setState({
+                'fbLoginFlag': data['fbLoginFlag'],
+                
+            });
+             console.log(this.state.gLoginFlag);
+            console.log(this.state.fbLoginFlag);
+        
+        })
+        
+        console.log(this.state.gLoginFlag);
+            console.log(this.state.fbLoginFlag);
+        
+        Socket.on('logG', (data) => {
+            this.setState({
+                'gLoginFlag': data['gLoginFlag'],
+                
+            });
+             console.log(this.state.gLoginFlag);
+            console.log(this.state.fbLoginFlag);
+        
+        })
         
         Socket.on('all chats', (data) => {
             this.setState({
@@ -93,7 +114,26 @@ export class Content extends React.Component {
     
     render() {
         
-        
+        const isFbLoggedIn = this.state.fbLoginFlag;
+        const isGLoggedIn = this.state.gLoginFlag;
+
+        let buttonFLogin = null;
+        let buttonGLogin = null;
+        let buttonFLogout = null;
+        let buttonGLogout = null;
+        if (isFbLoggedIn == false || isGLoggedIn == false) {
+          buttonFLogin = <FacebookButton />;
+          buttonGLogin = <GoogleButton />;
+        } 
+        if (isFbLoggedIn) {
+              buttonFLogout = <Logout />;
+              buttonFLogin = null;
+               buttonGLogin = null;
+          } else if (isGLoggedIn) {
+              buttonGLogout = <LogoutGoogle />;
+               buttonFLogin = null;
+                buttonGLogin = null;
+          }
         
         let testChat = this.state.testChat.map((n, index) =>            
             <li key={index}>                
@@ -115,14 +155,12 @@ export class Content extends React.Component {
                 
                 
                 
-                <FacebookButton />
-                <GoogleButton />
-                <Logout />
-                <LogoutGoogle />
-                <div 
-                    className="g-signin2" 
-                    data-theme="dark"> 
-                </div>
+                {buttonFLogin}
+                {buttonGLogin}
+                
+                {buttonFLogout}
+                {buttonGLogout}
+                
 
                
 

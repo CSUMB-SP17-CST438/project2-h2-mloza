@@ -13133,7 +13133,9 @@ var Content = exports.Content = function (_React$Component) {
         _this.state = {
             'testChat': [],
             'testUser': [],
-            'testOnlineNum': 0
+            'testOnlineNum': 0,
+            'fbLoginFlag': false,
+            'gLoginFlag': false
         };
 
         return _this;
@@ -13143,6 +13145,27 @@ var Content = exports.Content = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
+
+            _Socket.Socket.on('logFB', function (data) {
+                _this2.setState({
+                    'fbLoginFlag': data['fbLoginFlag']
+
+                });
+                console.log(_this2.state.gLoginFlag);
+                console.log(_this2.state.fbLoginFlag);
+            });
+
+            console.log(this.state.gLoginFlag);
+            console.log(this.state.fbLoginFlag);
+
+            _Socket.Socket.on('logG', function (data) {
+                _this2.setState({
+                    'gLoginFlag': data['gLoginFlag']
+
+                });
+                console.log(_this2.state.gLoginFlag);
+                console.log(_this2.state.fbLoginFlag);
+            });
 
             _Socket.Socket.on('all chats', function (data) {
                 _this2.setState({
@@ -13186,6 +13209,27 @@ var Content = exports.Content = function (_React$Component) {
         key: 'render',
         value: function render() {
 
+            var isFbLoggedIn = this.state.fbLoginFlag;
+            var isGLoggedIn = this.state.gLoginFlag;
+
+            var buttonFLogin = null;
+            var buttonGLogin = null;
+            var buttonFLogout = null;
+            var buttonGLogout = null;
+            if (isFbLoggedIn == false || isGLoggedIn == false) {
+                buttonFLogin = React.createElement(_FacebookButton.FacebookButton, null);
+                buttonGLogin = React.createElement(_GoogleButton.GoogleButton, null);
+            }
+            if (isFbLoggedIn) {
+                buttonFLogout = React.createElement(_Logout.Logout, null);
+                buttonFLogin = null;
+                buttonGLogin = null;
+            } else if (isGLoggedIn) {
+                buttonGLogout = React.createElement(_LogoutGoogle.LogoutGoogle, null);
+                buttonFLogin = null;
+                buttonGLogin = null;
+            }
+
             var testChat = this.state.testChat.map(function (n, index) {
                 return React.createElement(
                     'li',
@@ -13213,13 +13257,10 @@ var Content = exports.Content = function (_React$Component) {
                     null,
                     'Chatting...'
                 ),
-                React.createElement(_FacebookButton.FacebookButton, null),
-                React.createElement(_GoogleButton.GoogleButton, null),
-                React.createElement(_Logout.Logout, null),
-                React.createElement(_LogoutGoogle.LogoutGoogle, null),
-                React.createElement('div', {
-                    className: 'g-signin2',
-                    'data-theme': 'dark' }),
+                buttonFLogin,
+                buttonGLogin,
+                buttonFLogout,
+                buttonGLogout,
                 React.createElement(
                     'div',
                     { id: 'chat' },
@@ -13503,7 +13544,8 @@ var FacebookButton = exports.FacebookButton = function (_React$Component) {
                         FB.getLoginStatus(function (response) {
                             if (response.status == 'connected') {
                                 _Socket.Socket.emit('fbConnected', {
-                                    'facebook_user_token': response.authResponse.accessToken
+                                    'facebook_user_token': response.authResponse.accessToken,
+                                    'fbLoginFlag': true
                                 });
                             }
                         });
@@ -13604,7 +13646,8 @@ var GoogleButton = exports.GoogleButton = function (_React$Component) {
 
                     _Socket.Socket.emit('gConnect', {
                         'google_user_token': user.getAuthResponse().id_token,
-                        'gID': auth2.currentUser.get().getId()
+                        'gID': auth2.currentUser.get().getId(),
+                        'gLoginFlag': true
                     });
                     console.log("cool");
                 }
@@ -13687,7 +13730,8 @@ var Logout = exports.Logout = function (_React$Component) {
                 if (response.status == 'connected') {
                     console.log(response.authResponse.userID);
                     _Socket.Socket.emit('fbDisconnected', {
-                        'userID': response.authResponse.userID
+                        'userID': response.authResponse.userID,
+                        'fbLoginFlag': false
                     });
                 }
             });
@@ -13768,7 +13812,8 @@ var LogoutGoogle = exports.LogoutGoogle = function (_React$Component) {
             event.preventDefault();
             var auth2 = gapi.auth2.getAuthInstance();
             _Socket.Socket.emit('gDisconnected', {
-                'userID': auth2.currentUser.get().getId()
+                'userID': auth2.currentUser.get().getId(),
+                'gLoginFlag': false
             });
             auth2.signOut().then(function () {
                 console.log('User signed out.');

@@ -188,7 +188,9 @@ def fbConnection(data):
     json = response.json()
     flag = False;
     
-    
+    socketio.emit('logFB', { 
+        'fbLoginFlag': data['fbLoginFlag'],
+    })
     
     botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
     all_chats.append({        
@@ -244,6 +246,10 @@ def gConnection(data):
     print json["email"] + " email?"
     print "test"
     print "Got an event for new number with data:", data
+    
+    socketio.emit('logG', { 
+        'gLoginFlag': data['gLoginFlag'],
+    })
     
     botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
     all_chats.append({        
@@ -306,6 +312,10 @@ def fbDisconnection(data):
     models.db.session.delete(offlineUser)
     models.db.session.commit()
     
+    socketio.emit('logFB', { 
+        'fbLoginFlag': data['fbLoginFlag'],
+    })
+    
     users = models.Users.query.all()
     del all_online_users[:]
     for user in users:
@@ -343,6 +353,10 @@ def gDisconnection(data):
     discUser = offlineUser.user;
     models.db.session.delete(offlineUser)
     models.db.session.commit()
+    
+    socketio.emit('logG', { 
+        'gLoginFlag': data['gLoginFlag'],
+    })
     
     users = models.Users.query.all()
     del all_online_users[:]
