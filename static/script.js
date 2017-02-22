@@ -13831,7 +13831,8 @@ var GoogleButton = exports.GoogleButton = function (_React$Component) {
                     console.log(user.getAuthResponse().id_token);
 
                     _Socket.Socket.emit('gConnect', {
-                        'google_user_token': user.getAuthResponse().id_token
+                        'google_user_token': user.getAuthResponse().id_token,
+                        'gID': auth2.currentUser.get().getId()
                     });
                     console.log("cool");
                 }
@@ -14021,6 +14022,9 @@ var LogoutGoogle = exports.LogoutGoogle = function (_React$Component) {
         value: function handleSubmit(event) {
             event.preventDefault();
             var auth2 = gapi.auth2.getAuthInstance();
+            _Socket.Socket.emit('gDisconnected', {
+                'userID': auth2.currentUser.get().getId()
+            });
             auth2.signOut().then(function () {
                 console.log('User signed out.');
                 //   console.log(auth2.currentUser.get().getId() + "id out");

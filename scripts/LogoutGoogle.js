@@ -19,6 +19,9 @@ export class LogoutGoogle extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         var auth2 = gapi.auth2.getAuthInstance();
+        Socket.emit('gDisconnected', {                    
+                    'userID': auth2.currentUser.get().getId(),
+                });
         auth2.signOut().then(function () {
           console.log('User signed out.');
         //   console.log(auth2.currentUser.get().getId() + "id out");

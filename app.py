@@ -393,7 +393,7 @@ def gConnection(data):
             })
         for usr in all_online_users:
             print "all online: " + usr['name']
-        usr = models.Users(json['picture'], 'Google', json['name'], request.sid)
+        usr = models.Users(json['picture'], data['gID'], json['name'], request.sid)
         models.db.session.add(usr)
         models.db.session.commit()
         
@@ -456,8 +456,49 @@ def fbDisconnection(data):
         # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
-   
+ 
 
+@socketio.on('gDisconnected')
+def gDisconnection(data):
+    print "USERID G: " + data['userID']
+    offlineUser = models.Users.query.filter_by(fbID=data['userID']).first();
+    discUser = offlineUser.user;
+    models.db.session.delete(offlineUser)
+    models.db.session.commit()
+    
+    users = models.Users.query.all()
+    # all_online_users = []
+    del all_online_users[:]
+    for user in users:
+        all_online_users.append({        
+            'name': user.user,        
+            'picture': user.img,        
+            'fbID': user.fbID,   
+        })
+    
+    socketio.emit('allusers', { 
+        'users': all_online_users,
+        'onlineNum': len(all_online_users),
+        # 'users': all_online_users,
+        # 'onlineNum': len(all_online_users),
+    }, broadcast=True)
+    
+    botChat = 'Aww! ' + discUser + ' left us...'
+    all_chats.append({        
+        'name': 'Dragon-bot',        
+        'picture': chatBotImg,        
+        'chat': botChat,   
+    })
+    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+    models.db.session.add(msg)
+    models.db.session.commit()
+    
+    socketio.emit('all chats', { 
+        'chats': all_chats,
+        # 'users': all_online_users,
+        # 'onlineNum': len(all_online_users),
+    }, broadcast=True)
+    
     
 
 if __name__ == '__main__':  # __name__!

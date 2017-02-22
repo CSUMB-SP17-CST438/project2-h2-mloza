@@ -32,6 +32,7 @@ export class GoogleButton extends React.Component {
                 
                 Socket.emit('gConnect', {                        
                     'google_user_token': user.getAuthResponse().id_token, 
+                    'gID': auth2.currentUser.get().getId(),
                     // 'facebook_user_token': '',                  
                     
                 }); 
