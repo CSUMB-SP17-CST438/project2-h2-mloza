@@ -13144,90 +13144,39 @@ var Content = exports.Content = function (_React$Component) {
             'chatBot': '',
             'guestNu': 0
         };
-        // Socket.on('allchats', (data) => {
-        //     this.setState({
-        //         'testChat': data['chats'],
-        //         // 'users': data['users'],
-        //         // 'onlineNum': data['onlineNum'],
-        //     });
-        // })
 
         return _this;
     }
-
-    //     function signOut() {
-    //     var auth2 = gapi.auth2.getAuthInstance();
-    //     auth2.signOut().then(function () {
-    //       console.log('User signed out.');
-    //     });
-    //   }
-
 
     _createClass(Content, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
 
-            //         function signOut() {
-            //     var auth2 = gapi.auth2.getAuthInstance();
-            //     auth2.signOut().then(function () {
-            //       console.log('User signed out.');
-            //     });
-            //   }
-
-
-            //         gapi.signin2.render('g-signin2', {
-            //     'scope': 'https://www.googleapis.com/auth/plus.login',
-            //     'width': 200,
-            //     'height': 50,
-            //     'longtitle': true,
-            //     'theme': 'dark',
-            //     'onsuccess': this. onSignIn
-            //   });  
-
             _Socket.Socket.on('all chats', function (data) {
                 _this2.setState({
-                    // 'chats': data['chats'],
-                    // 'users': data['users'],
-                    // 'onlineNum': data['onlineNum'],
                     'testChat': data['chats']
 
                 });
-                // console.log(this.);
             });
 
             _Socket.Socket.on('guestCo', function (data) {
                 _this2.setState({
-                    // 'chats': data['chats'],
-                    // 'users': data['users'],
-                    // 'onlineNum': data['onlineNum'],
                     'guestNu': _this2.state.guestNu + 1
 
                 });
-                // console.log(this.);
             });
 
             _Socket.Socket.on('guestDis', function (data) {
                 _this2.setState({
-                    // 'chats': data['chats'],
-                    // 'users': data['users'],
-                    // 'onlineNum': data['onlineNum'],
                     'guestNu': _this2.state.guestNu - 1
 
                 });
-                // console.log(this.);
             });
 
             _Socket.Socket.on('left', function (data) {
-                // this.setState({
-                //     'guestNu': this.state.guestNu - 1,
-
-                // });
                 FB.getLoginStatus(function (response) {
                     if (response.status == 'connected') {
-                        // userID = response.authResponse.userID;
-                        //   console.log(response.authResponse.userID);
-                        //   console.log(response.authResponse.accessToken);
                         _Socket.Socket.emit('fbDisconnected', {
                             'userID': data['user']
                         });
@@ -13238,20 +13187,7 @@ var Content = exports.Content = function (_React$Component) {
                 FB.logout(function (response) {
                     // user is now logged out
                 });
-                // console.log(this.);
             });
-
-            // Socket.on('chatBot', (data) => {
-            //     this.setState({
-            //         // 'chats': data['chats'],
-            //         // 'users': data['users'],
-            //         // 'onlineNum': data['onlineNum'],
-            //         'chatBot': data['chatBot'],
-
-            //     });
-            //     // console.log(this.);
-
-            // })
 
             _Socket.Socket.on('allchats', function (data) {
                 _this2.setState({
@@ -13282,21 +13218,6 @@ var Content = exports.Content = function (_React$Component) {
                     'testUser': data['users'],
                     'testOnlineNum': data['onlineNum']
                 });
-
-                // this.setState({
-                //     'users': data['users'],
-                //     'onlineNum': data['onlineNum'],
-
-                //     'testUser': data['users'],
-                //     'testOnlineNum': data['onlineNum'],
-                // });
-
-            });
-
-            FB.getLoginStatus(function (response) {
-                if (response.status == 'connected') {
-                    console.log("logged in");
-                }
             });
 
             _Socket.Socket.on('connectionLost', function (data) {
@@ -13304,57 +13225,13 @@ var Content = exports.Content = function (_React$Component) {
                 _this2.setState({
                     'personLeft': data['disconnected']
                 });
-
-                // FB.getLoginStatus((response) => {            
-                //     if (response.status == 'connected') {                
-                //       Socket.emit('onlineCurrUser', {                    
-                //         'userID': response.authResponse.userID,    
-
-                //     });
-                //     }        
-                // });
-
             });
-
-            // Socket.on('onlineUsers', (data) => {
-            //   this.setState({
-            //         'possibleOffline': data['possible']
-            //     });
-
-            //     console.log("first test");
-
-            //     FB.getLoginStatus((response) => {            
-            //         if (response.status == 'connected') {                
-            //             for (i = 0; i < possibleOffline.length; i++) {
-            //                 console.log("testing loop");
-            //                 if (response.authResponse.userID == possibleOffline[i]) {
-            //                     Socket.emit('fbDisconnected', {                    
-            //                         'userID': response.authResponse.userID,
-            //                     });
-            //                     // FB.logout(function(response) {
-            //                     //   // user is now logged out
-            //                     // });
-            //                     console.log("DISCONNECTED");
-            //                 }
-            //             }
-            //         }
-
-            //     }); 
-
-            // })
-
         }
-        // <p>{this.state.newPerson}</p> 
-        // <p>{this.state.chats}</p>
-
     }, {
         key: 'render',
         value: function render() {
             var _this3 = this;
 
-            // let chats = this.state.chats.map(
-            //     (n, index) => <li key={index}>{n}</li>
-            // );
             var chats = this.state.chats.map(function (n, index) {
                 return React.createElement(
                     'li',
@@ -13397,20 +13274,6 @@ var Content = exports.Content = function (_React$Component) {
                 );
             });
 
-            // <ul>{users}</ul>
-            //         <ul id="allChat">{testChat}</ul>
-            //         <ul id="newChat">{chats}</ul>
-            //         <ul id="onlineUsers">{testUser}</ul>
-
-            // <div                    
-            //             className="fb-login-button"                    
-            //             data-max-rows="1"                    
-            //             data-size="medium"                    
-            //             data-show-faces="false"                   
-            //             data-auto-logout-link="true">                
-            //         </div>
-
-            // <p>Guests({this.state.guestNu})</p>
             return React.createElement(
                 'div',
                 null,
@@ -13613,21 +13476,25 @@ var Button = exports.Button = function (_React$Component) {
                     console.log(_this2.state.value);
                 }
             });
-            // Socket.emit('new number', {
-            //     'number': this.state.value,
-            // });
+
+            var auth2 = gapi.auth2.getAuthInstance();
+            var user = auth2.currentUser.get();
+            if (user.isSignedIn()) {
+
+                console.log("yup");
+                console.log(user.getAuthResponse().id_token);
+
+                _Socket.Socket.emit('new chat google', {
+                    'google_user_token': user.getAuthResponse().id_token,
+                    'gID': auth2.currentUser.get().getId(),
+                    'chat': this.state.value
+
+                });
+                console.log("coolio");
+            }
+
             console.log('Sent up the chat to server!', this.state.value);
-
-            // let random = Math.floor(Math.random() * 100);
-            // console.log('Generated a random number: ', random);
-            // Socket.emit('new number', {
-            //     'number': random,
-            // });
-            // console.log('Sent up the random number to server!');
         }
-
-        // <textarea value={this.state.value} onChange={this.handleChange} cols="30" rows="5" ></textarea>
-
     }, {
         key: 'handleChange',
         value: function handleChange(event) {
@@ -13698,20 +13565,7 @@ var FacebookButton = exports.FacebookButton = function (_React$Component) {
 
     _createClass(FacebookButton, [{
         key: 'componentDidMount',
-        value: function componentDidMount() {
-            //   FB.getLoginStatus((response) => {            
-            //     if (response.status == 'connected') {                
-            //       console.log("logged in");
-            //       this.setState({
-            //             'buttonName': 'Facebook Logout',
-            //         });
-            // } else  {
-            //     this.setState({
-            //         'buttonName': 'Facebook Login',
-            //     });
-            // }        
-            // }); 
-        }
+        value: function componentDidMount() {}
     }, {
         key: 'handleSubmit',
         value: function handleSubmit(event) {
@@ -13728,19 +13582,12 @@ var FacebookButton = exports.FacebookButton = function (_React$Component) {
                                 });
                             }
                         });
-                        //   Socket.emit('fbConnected', {                    
-                        //         'facebook_user_token': response.authResponse.accessToken,
-
-                        //     }); 
                         this.setState({
                             'buttonName': 'Facebook Logout'
                         });
                     });
                 } else {
                     console.log('User cancelled login or did not fully authorize.');
-                    //  this.setState({
-                    //     'buttonName': 'Facebook Login',
-                    // });
                 }
             });
             console.log('Sent up the chat to server!');
@@ -13838,30 +13685,6 @@ var GoogleButton = exports.GoogleButton = function (_React$Component) {
                 }
             });
 
-            // auth2.signIn().then(function () {
-            //     let user = auth2.currentUser.get();
-            //     if (user.isSignedIn()) {  
-
-            //         console.log("yup");
-            //         Socket.emit('gConnect', {                        
-            //             'google_user_token': user.getAuthResponse().id_token, 
-            //             // 'facebook_user_token': '',                  
-
-            //         });                
-
-            //     } 
-            //     console.log(user.getAuthResponse().id_token);
-            //   console.log('User signed in.');
-            // });
-            // auth2.signIn();
-            // console.log('User signed in.');
-
-
-            // Socket.emit('gLoggedIn', {
-            //     'gUser': user,
-            // });
-
-
             console.log('The link was clicked.');
             console.log('Sent up the chat to server!');
         }
@@ -13937,13 +13760,10 @@ var Logout = exports.Logout = function (_React$Component) {
             event.preventDefault();
             FB.getLoginStatus(function (response) {
                 if (response.status == 'connected') {
-                    // userID = response.authResponse.userID;
                     console.log(response.authResponse.userID);
-                    //   console.log(response.authResponse.accessToken);
                     _Socket.Socket.emit('fbDisconnected', {
                         'userID': response.authResponse.userID
                     });
-                    //   console.log("test");
                 }
             });
 
@@ -14027,14 +13847,6 @@ var LogoutGoogle = exports.LogoutGoogle = function (_React$Component) {
             });
             auth2.signOut().then(function () {
                 console.log('User signed out.');
-                //   console.log(auth2.currentUser.get().getId() + "id out");
-                // let user = auth2.currentUser.get();
-                // if (user.isSignedIn()) {  
-                //     console.log(auth2.currentUser.get().getId() + "id go");
-                //     var profile = auth2.currentUser.get().getBasicProfile();
-                //     console.log('ID dis: ' + profile.getId());         
-
-                // } 
             });
 
             console.log('The link was clicked.');

@@ -40,31 +40,10 @@ export class GoogleButton extends React.Component {
                 
             } 
           });
-
-        
-        // auth2.signIn().then(function () {
-        //     let user = auth2.currentUser.get();
-        //     if (user.isSignedIn()) {  
-        
-        //         console.log("yup");
-        //         Socket.emit('gConnect', {                        
-        //             'google_user_token': user.getAuthResponse().id_token, 
-        //             // 'facebook_user_token': '',                  
-                    
-        //         });                
-                
-        //     } 
-        //     console.log(user.getAuthResponse().id_token);
-        //   console.log('User signed in.');
-        // });
-        // auth2.signIn();
-        // console.log('User signed in.');
         
         
         
-        // Socket.emit('gLoggedIn', {
-        //     'gUser': user,
-        // });
+        
         
         
         

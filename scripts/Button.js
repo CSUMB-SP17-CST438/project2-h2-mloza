@@ -23,20 +23,30 @@ export class Button extends React.Component {
                 console.log(this.state.value);
             }        
         });
-        // Socket.emit('new number', {
-        //     'number': this.state.value,
-        // });
+        
+        let auth2 = gapi.auth2.getAuthInstance();
+        let user = auth2.currentUser.get();
+        if (user.isSignedIn()) {  
+        
+                console.log("yup"); 
+                console.log(user.getAuthResponse().id_token);
+                
+                Socket.emit('new chat google', {     
+                    'google_user_token': user.getAuthResponse().id_token,
+                    'gID': auth2.currentUser.get().getId(),
+                    'chat': this.state.value,
+                    
+                }); 
+                 console.log("coolio");
+                
+            }
+        
         console.log('Sent up the chat to server!', this.state.value);
 
-        // let random = Math.floor(Math.random() * 100);
-        // console.log('Generated a random number: ', random);
-        // Socket.emit('new number', {
-        //     'number': random,
-        // });
-        // console.log('Sent up the random number to server!');
+        
     }
     
-    // <textarea value={this.state.value} onChange={this.handleChange} cols="30" rows="5" ></textarea>
+    
     
     handleChange(event) {
     this.setState({value: event.target.value});

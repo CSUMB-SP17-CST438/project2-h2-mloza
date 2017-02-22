@@ -27,13 +27,10 @@ export class Logout extends React.Component {
         event.preventDefault();
         FB.getLoginStatus((response) => {            
             if (response.status == 'connected') {  
-            // userID = response.authResponse.userID;
                console.log(response.authResponse.userID);
-            //   console.log(response.authResponse.accessToken);
                 Socket.emit('fbDisconnected', {                    
                     'userID': response.authResponse.userID,
                 });
-            //   console.log("test");
             }        
         });
         

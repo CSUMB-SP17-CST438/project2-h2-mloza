@@ -24,14 +24,7 @@ export class LogoutGoogle extends React.Component {
                 });
         auth2.signOut().then(function () {
           console.log('User signed out.');
-        //   console.log(auth2.currentUser.get().getId() + "id out");
-            // let user = auth2.currentUser.get();
-            // if (user.isSignedIn()) {  
-            //     console.log(auth2.currentUser.get().getId() + "id go");
-            //     var profile = auth2.currentUser.get().getBasicProfile();
-            //     console.log('ID dis: ' + profile.getId());         
-                
-            // } 
+        
         });
         
 

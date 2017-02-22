@@ -13,18 +13,7 @@ export class FacebookButton extends React.Component {
   }
   
   componentDidMount() {
-    //   FB.getLoginStatus((response) => {            
-    //     if (response.status == 'connected') {                
-    //       console.log("logged in");
-    //       this.setState({
-    //             'buttonName': 'Facebook Logout',
-    //         });
-        // } else  {
-        //     this.setState({
-        //         'buttonName': 'Facebook Login',
-        //     });
-        // }        
-    // }); 
+    
   }
   
     handleSubmit(event) {
@@ -40,20 +29,14 @@ export class FacebookButton extends React.Component {
                             'facebook_user_token': response.authResponse.accessToken,  
                         });  
                     }        
-                });
-            //   Socket.emit('fbConnected', {                    
-            //         'facebook_user_token': response.authResponse.accessToken,
-                    
-            //     }); 
+                }); 
                this.setState({
                     'buttonName': 'Facebook Logout',
                 });
              });
             } else {
              console.log('User cancelled login or did not fully authorize.');
-            //  this.setState({
-            //     'buttonName': 'Facebook Login',
-            // });
+            
             }
         });
         console.log('Sent up the chat to server!');

@@ -3,7 +3,6 @@ import flask
 import flask_socketio
 import requests
 import flask_sqlalchemy
-# from flask import jsonify
 from flask import request
 
 
@@ -13,13 +12,6 @@ socketio = flask_socketio.SocketIO(app)
 
 import models 
 
-# # URI scheme: postgresql://<username>:<password>@<hostname>:<port>/<database-name> 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://proj2_user:project2handin1@localhost/postgres'  
-# db = flask_sqlalchemy.SQLAlchemy(app)
-
-
-
-# clients = 0;
 
 ip = [];
 all_chats = [];
@@ -30,14 +22,6 @@ chatBotImg = 'https://lh4.googleusercontent.com/vnCZbUminSYgNXsQdiQffUnjXa0XMnIS
     
 @app.route('/')
 def hello():
-    
-    # user = models.Message.query.filter_by(user='Natsu Dragneel').first()
-    # print "image: " + user.img
-    # print "name : " + user.user
-    
-    # msg = models.Message('pic.jpg', 'Natsu Dragneel', 'Rawr')
-    # models.db.session.add(msg)
-    # models.db.session.commit()
     return flask.render_template('index.html')
     
 
@@ -48,47 +32,7 @@ def on_connect():
         'connected': 'Guest has connected'
         }, broadcast=True)
     print "SOMEONE CONNECTED"
-    # print request.sid
-    # print request.remote_addr
-    # print request.headers.getlist("X-Forwarded-For")[0]
-    # # print " WHAT THE HELL???"
     
-    # flagIP = False;
-    # ips = models.ipAddr.query.all()
-    # for usrs in ips:
-    #     if (usrs.ip == request.sid):
-    #         flagIP = True;
-    # if (flagIP == False):
-    #     ips.append({
-    #             'ip': request.sid,  
-    #         })
-    #     users = models.Users.query.all()
-    #     flagC = False;
-    #     for u in users:
-    #         if u.ip == request.sid:
-    #             flagC = True;
-    #     if  flagC == False:
-    #         all_chats.append({        
-    #             'name': 'Dragon-bot',        
-    #             'picture': chatBotImg,        
-    #             'chat': 'Watch out! Guest has connected!',   
-    #         })
-    #         msg = models.Message(chatBotImg, '1', 'Dragon-bot', 'Watch out! Guest has connected!')
-    #         models.db.session.add(msg)
-    #         models.db.session.commit()
-            
-    #     socketio.emit('all chats', { 
-    #         'chats': all_chats,
-    #         # 'users': all_online_users,
-    #         # 'onlineNum': len(all_online_users),
-    #     }, broadcast=True)
-    #     socketio.emit('guestCo', { 
-    #         # 'users': all_online_users,
-    #         # 'onlineNum': len(all_online_users),
-    #     }, broadcast=True)
-    #     msg = models.ipAddr(request.sid)
-    #     models.db.session.add(msg)
-    #     models.db.session.commit()
     
     
     
@@ -101,12 +45,10 @@ def on_connect():
             'chat': user.chat, 
             'fbID': user.fbID,
         })
-        # print " TST "
-        # print "all: " + user.img + " " + user.user + " " + user.chat
+        
     socketio.emit('allchats', { 
         'chats': all_chats,
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
+        
     }, broadcast=True)
     
     users = models.Users.query.all()
@@ -122,19 +64,11 @@ def on_connect():
     socketio.emit('allusers', { 
         'users': all_online_users,
         'onlineNum': len(all_online_users),
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
-    # print " before "
-    # for chat in all_chats:
-    #     print chat["name"];
-    #     print chat['picture']
-    #     print chat['chat']
+    
     
     print "sent"
-    # clients+=1;
-    # socketio.emit('broadcast',{ description: clients + ' clients connected!'});
-    
+
 
 @socketio.on('disconnect')
 def on_disconnect():
@@ -150,68 +84,18 @@ def on_disconnect():
             print u.fbID;
             socketio.emit('left', { 
                 'user': u.fbID,
-                # 'disconnected': 'Guest has disconnected',
-                # 'left': True,
                 })
         
-    #     all_possible_online_users.append(u.ip);
     
-    # # for pos in all_possible_online_users:
-    # #     print pos["ip"] + " ID"
-        
-    # for i in range(len(all_possible_online_users)):
-    #     print all_possible_online_users[i] + "ID"
-        
-    # online = False;
-    # for i in range(len(all_possible_online_users)):
-    #     print all_possible_online_users[i] + "ID during"
-    #     if all_possible_online_users[i] == request.sid:
-    #         all_possible_online_users.remove(request.sid)
     
     print "DISCONNECTED: " + request.sid
         
     
-    # for i in range(len(all_possible_online_users)):
-    #     print all_possible_online_users[i] + "ID AFTER"
-    
-    # socketio.emit('connectionLost', { 
-    #     'disconnected': 'Guest has disconnected',
-    #     'left': True,
-    #     }, broadcast=True)
-        
-        
-    # clients-=1;
-    # socketio.emit('broadcast',{ description: clients + ' clients connected!'});
-    
-    
-# @socketio.on('onlineCurrUser')
-# def online_user(data):
-#     all_possible_online_users = all_online_users;
-    
-#     for pos in all_possible_online_users:
-#         print pos['fbID'] + " ID"
-        
-#     for user in all_possible_online_users:
-#         if user['fbID'] == data['userID']:
-#             all_possible_online_users.remove(data['userID'])
-    
-#     for pos in all_possible_online_users:
-#         print pos['fbID'] + " ID AFTER"
-    
-#     socketio.emit('onlineUsers', {                    
-#         'possible': all_possible_online_users,    
-        
-#     });
-
-
-
-@socketio.on('new chat')
+@socketio.on('new chat google')
 def on_new_chat(data):
     response = requests.get( 
-        'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cpicture&access_token=' + data['facebook_user_token'])    
+    'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_user_token'])    
     json = response.json()
-    print json["id"]
-    # print json.dumps(json, indent=2)
     
     
     if data['chat'].find("!!", 0, 2) != -1:
@@ -237,11 +121,56 @@ def on_new_chat(data):
         msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
         models.db.session.add(msg)
         models.db.session.commit()
-        # socketio.emit('chatBot', { 
-        #     'chatBotMsg': botChat,
-        #     # 'users': all_online_users,
-        #     # 'onlineNum': len(all_online_users),
-        # })
+    else:
+        all_chats.append({        
+        'name': json['name'],        
+        'picture': json['picture'],        
+        'chat': data['chat'],   
+        })
+        msg = models.Message(json['picture'], data['gID'], json['name'], data['chat'])
+        models.db.session.add(msg)
+        models.db.session.commit()
+    socketio.emit('all chats', { 
+        'chats': all_chats,
+    }, broadcast=True)
+    
+    print "Got an event for new google with data:", data    
+
+
+
+
+
+@socketio.on('new chat')
+def on_new_chat(data):
+    response = requests.get( 
+        'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cpicture&access_token=' + data['facebook_user_token'])    
+    json = response.json()
+    print json["id"]
+    
+    
+    if data['chat'].find("!!", 0, 2) != -1:
+        print " DRAGON "
+        if data['chat'].find("!! say", 0, 6) != -1:
+            botChat = data['chat'][7:]
+        else:
+            if data['chat'] == "!! about":
+                botChat = "Hello! I am Dragon-bot. This is a fun place to chat."
+            elif data['chat'] == "!! help":
+                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat"
+            elif data['chat'] == "!! rawr":
+                botChat = "RAAAAWR!!!"
+            elif data['chat'] == "!! eat":
+                botChat = "FREE FOOD! Thank you!"
+            else:
+                botChat = "Nope! Check out !! help"
+        all_chats.append({        
+            'name': 'Dragon-bot',        
+            'picture': chatBotImg,        
+            'chat': botChat,   
+        })
+        msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+        models.db.session.add(msg)
+        models.db.session.commit()
     else:
         all_chats.append({        
         'name': json['name'],        
@@ -253,40 +182,16 @@ def on_new_chat(data):
         models.db.session.commit()
     socketio.emit('all chats', { 
         'chats': all_chats,
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
-    # print "chat: " + data['chat'];
-    # for num in all_chats:
-    #     print num["chat"] + "yay"
-    # flag = False;
-    # for user in all_online_users:
-    #     print user["name"];
-    #     if (user["name"] == json['name']):
-    #         flag = True;
-    # if (flag == False):
-    #     all_online_users.append({
-    #             'name': json['name'],        
-    #             'picture': json['picture']['data']['url'], 
-    #         })
-    # print json['name']
     print "Got an event for new number with data:", data
-    # TODO: Fill me out!
-    # all_chats.append(data['number'])
     
-        
-    
-    # socketio.emit('all numbers', { 
-    #     'numbers': data['number']
-    #     }, broadcast=True)
     
 @socketio.on('fbConnected')
 def fbConnection(data):
     response = requests.get( 
     'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cpicture&access_token=' + data['facebook_user_token'])    
     json = response.json()
-    # print "fb connected";
     flag = False;
     
     
@@ -303,17 +208,12 @@ def fbConnection(data):
     
     socketio.emit('all chats', { 
         'chats': all_chats,
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
     socketio.emit('guestDis', { 
-            # 'users': all_online_users,
-            # 'onlineNum': len(all_online_users),
         }, broadcast=True)
     
     users = models.Users.query.all()
-    # all_online_users = []
     del all_online_users[:]
     for user in users:
         all_online_users.append({        
@@ -351,7 +251,6 @@ def gConnection(data):
     json = response.json()
     print json["email"] + " email?"
     print "test"
-    # print data['google_user_token'] + " google"
     print "Got an event for new number with data:", data
     
     botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
@@ -366,12 +265,9 @@ def gConnection(data):
     
     socketio.emit('all chats', { 
         'chats': all_chats,
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
     users = models.Users.query.all()
-    # all_online_users = []
     del all_online_users[:]
     for user in users:
         all_online_users.append({        
@@ -402,10 +298,7 @@ def gConnection(data):
         'onlineNum': len(all_online_users),
         }, broadcast=True)
     
-    # socketio.emit('gConn', { 
-    #     # 'users': all_online_users,
-    #     # 'auth2': data['auth2'],
-    #     })
+  
     
 @socketio.on('gLoggedIn')
 def gLog(data):
@@ -424,7 +317,6 @@ def fbDisconnection(data):
     models.db.session.commit()
     
     users = models.Users.query.all()
-    # all_online_users = []
     del all_online_users[:]
     for user in users:
         all_online_users.append({        
@@ -436,8 +328,6 @@ def fbDisconnection(data):
     socketio.emit('allusers', { 
         'users': all_online_users,
         'onlineNum': len(all_online_users),
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
     botChat = 'Aww! ' + discUser + ' left us...'
@@ -452,8 +342,6 @@ def fbDisconnection(data):
     
     socketio.emit('all chats', { 
         'chats': all_chats,
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
  
@@ -467,7 +355,6 @@ def gDisconnection(data):
     models.db.session.commit()
     
     users = models.Users.query.all()
-    # all_online_users = []
     del all_online_users[:]
     for user in users:
         all_online_users.append({        
@@ -479,8 +366,6 @@ def gDisconnection(data):
     socketio.emit('allusers', { 
         'users': all_online_users,
         'onlineNum': len(all_online_users),
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
     botChat = 'Aww! ' + discUser + ' left us...'
@@ -495,8 +380,6 @@ def gDisconnection(data):
     
     socketio.emit('all chats', { 
         'chats': all_chats,
-        # 'users': all_online_users,
-        # 'onlineNum': len(all_online_users),
     }, broadcast=True)
     
     
