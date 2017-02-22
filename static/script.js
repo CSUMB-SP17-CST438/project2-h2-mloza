@@ -13131,18 +13131,9 @@ var Content = exports.Content = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
 
         _this.state = {
-            // 'chats': '',
-            'chats': [],
-            'newPerson': '',
-            'personLeft': '',
-            'users': [],
-            'onlineNum': 0,
             'testChat': [],
             'testUser': [],
-            'testOnlineNum': 0,
-            'possibleOffline': [],
-            'chatBot': '',
-            'guestNu': 0
+            'testOnlineNum': 0
         };
 
         return _this;
@@ -13157,35 +13148,6 @@ var Content = exports.Content = function (_React$Component) {
                 _this2.setState({
                     'testChat': data['chats']
 
-                });
-            });
-
-            _Socket.Socket.on('guestCo', function (data) {
-                _this2.setState({
-                    'guestNu': _this2.state.guestNu + 1
-
-                });
-            });
-
-            _Socket.Socket.on('guestDis', function (data) {
-                _this2.setState({
-                    'guestNu': _this2.state.guestNu - 1
-
-                });
-            });
-
-            _Socket.Socket.on('left', function (data) {
-                FB.getLoginStatus(function (response) {
-                    if (response.status == 'connected') {
-                        _Socket.Socket.emit('fbDisconnected', {
-                            'userID': data['user']
-                        });
-                        console.log("test");
-                    }
-                });
-
-                FB.logout(function (response) {
-                    // user is now logged out
                 });
             });
 
@@ -13219,29 +13181,10 @@ var Content = exports.Content = function (_React$Component) {
                     'testOnlineNum': data['onlineNum']
                 });
             });
-
-            _Socket.Socket.on('connectionLost', function (data) {
-
-                _this2.setState({
-                    'personLeft': data['disconnected']
-                });
-            });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
-
-            var chats = this.state.chats.map(function (n, index) {
-                return React.createElement(
-                    'li',
-                    { key: index },
-                    React.createElement('img', { src: n.picture }),
-                    n.name,
-                    ': ',
-                    n.chat
-                );
-            });
 
             var testChat = this.state.testChat.map(function (n, index) {
                 return React.createElement(
@@ -13262,31 +13205,13 @@ var Content = exports.Content = function (_React$Component) {
                 );
             });
 
-            var users = this.state.users.map(function (n, index) {
-                return React.createElement(
-                    'li',
-                    { key: index },
-                    'Online (',
-                    _this3.state.onlineNum,
-                    '):',
-                    React.createElement('img', { src: n.picture }),
-                    n.name
-                );
-            });
-
             return React.createElement(
                 'div',
                 null,
-                React.createElement(_Users.Users, null),
                 React.createElement(
                     'h1',
                     null,
-                    'Chating...'
-                ),
-                React.createElement(
-                    'p',
-                    null,
-                    this.state.personLeft
+                    'Chatting...'
                 ),
                 React.createElement(_FacebookButton.FacebookButton, null),
                 React.createElement(_GoogleButton.GoogleButton, null),

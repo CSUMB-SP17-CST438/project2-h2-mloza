@@ -12,18 +12,9 @@ export class Content extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // 'chats': '',
-            'chats': [],
-            'newPerson': '',
-            'personLeft': '',
-            'users': [],
-            'onlineNum': 0,
             'testChat': [],
             'testUser': [],
             'testOnlineNum': 0,
-            'possibleOffline': [],
-            'chatBot': '',
-            'guestNu': 0,
         };
          
     }
@@ -46,37 +37,8 @@ export class Content extends React.Component {
         
         })
         
-        Socket.on('guestCo', (data) => {
-            this.setState({
-                'guestNu': this.state.guestNu + 1,
-                
-            });
+       
         
-        })
-        
-        Socket.on('guestDis', (data) => {
-            this.setState({
-                'guestNu': this.state.guestNu - 1,
-                
-            });
-        
-        })
-        
-        Socket.on('left', (data) => {
-            FB.getLoginStatus((response) => {            
-                if (response.status == 'connected') {  
-                    Socket.emit('fbDisconnected', {                    
-                        'userID': data['user'],
-                    });
-                  console.log("test");
-                }        
-            });
-            
-            FB.logout(function(response) {
-              // user is now logged out
-            });
-        
-        })
         
         
         
@@ -123,17 +85,6 @@ export class Content extends React.Component {
        
         
         
-        Socket.on('connectionLost', (data) => {
-            
-            this.setState({
-                'personLeft': data['disconnected']
-            });
-            
-            
-              
-            
-        })
-        
         
         
         
@@ -142,12 +93,7 @@ export class Content extends React.Component {
     
     render() {
         
-        let chats = this.state.chats.map((n, index) =>            
-            <li key={index}>                
-                <img src={n.picture} />                
-                {n.name}: {n.chat}            
-            </li>        
-        );
+        
         
         let testChat = this.state.testChat.map((n, index) =>            
             <li key={index}>                
@@ -162,22 +108,12 @@ export class Content extends React.Component {
             </li>        
         );
         
-        let users = this.state.users.map((n, index) =>            
-            <li key={index}>     
-                Online ({this.state.onlineNum}):
-                <img src={n.picture} />                
-                {n.name}            
-            </li>        
-        );
-        
         
         return (
             <div>
-                <Users />
-                <h1>Chating...</h1>
+                <h1>Chatting...</h1>
                 
                 
-                <p>{this.state.personLeft}</p> 
                 
                 <FacebookButton />
                 <GoogleButton />

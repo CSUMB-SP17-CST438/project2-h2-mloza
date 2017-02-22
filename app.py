@@ -28,9 +28,6 @@ def hello():
 
 @socketio.on('connect')
 def on_connect():
-    socketio.emit('connection', { 
-        'connected': 'Guest has connected'
-        }, broadcast=True)
     print "SOMEONE CONNECTED"
     
     
@@ -82,9 +79,6 @@ def on_disconnect():
             
             print u.user + " disconnected"
             print u.fbID;
-            socketio.emit('left', { 
-                'user': u.fbID,
-                })
         
     
     
@@ -210,8 +204,6 @@ def fbConnection(data):
         'chats': all_chats,
     }, broadcast=True)
     
-    socketio.emit('guestDis', { 
-        }, broadcast=True)
     
     users = models.Users.query.all()
     del all_online_users[:]
@@ -304,9 +296,7 @@ def gConnection(data):
 def gLog(data):
     print " GOOOOOOGLE"
     print data['gUser']
-    socketio.emit('gLoggedInBack', {
-            'gUser': data['gUser'],
-        });
+    
         
 @socketio.on('fbDisconnected')
 def fbDisconnection(data):
