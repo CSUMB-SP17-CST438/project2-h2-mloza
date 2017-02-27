@@ -13149,6 +13149,8 @@ var Content = exports.Content = function (_React$Component) {
                     'testChat': data['chats']
 
                 });
+                // console.log(data['chats']);
+                // console.log(this.state.testChat);
             });
 
             _Socket.Socket.on('allchats', function (data) {
@@ -13185,17 +13187,36 @@ var Content = exports.Content = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-
             var testChat = this.state.testChat.map(function (n, index) {
-                return React.createElement(
-                    'li',
-                    { key: index },
-                    React.createElement('img', { src: n.picture }),
-                    n.name,
-                    ': ',
-                    n.chat
-                );
-            });
+                if (n.url == 'Y') {
+                    return React.createElement(
+                        'li',
+                        { key: index },
+                        React.createElement('img', { src: n.picture }),
+                        n.name,
+                        ': ',
+                        React.createElement(
+                            'a',
+                            { href: n.chat, target: '_blank' },
+                            n.chat
+                        )
+                    );
+                } else {
+                    return React.createElement(
+                        'li',
+                        { key: index },
+                        React.createElement('img', { src: n.picture }),
+                        n.name,
+                        ':',
+                        React.createElement(
+                            'span',
+                            null,
+                            n.chat
+                        )
+                    );
+                }
+            }.bind(this));
+
             var testUser = this.state.testUser.map(function (n, index) {
                 return React.createElement(
                     'li',

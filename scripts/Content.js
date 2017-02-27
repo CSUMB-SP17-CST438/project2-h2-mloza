@@ -30,7 +30,8 @@ export class Content extends React.Component {
                 'testChat': data['chats'],
                 
             });
-        
+            // console.log(data['chats']);
+            // console.log(this.state.testChat);
         })
         
        
@@ -42,6 +43,7 @@ export class Content extends React.Component {
             this.setState({
                 'testChat': data['chats'],
             });
+            
         })
         
         Socket.on('allusers', (data) => {
@@ -88,16 +90,24 @@ export class Content extends React.Component {
     }
     
     render() {
+        let testChat = this.state.testChat.map(function(n, index) { 
+                if (n.url == 'Y') {
+                    return <li key={index}>                
+                        <img src={n.picture} /> 
+                        {n.name}: <a href={n.chat} target="_blank">{n.chat}</a>
+                                    
+                    </li>  
+                } else {
+                    return <li key={index}>                
+                        <img src={n.picture} /> 
+                        {n.name}: 
+                        <span>{n.chat}</span>
+                                    
+                    </li> 
+                }
+                   
+        }.bind(this));
         
-
-        
-        
-        let testChat = this.state.testChat.map((n, index) =>            
-            <li key={index}>                
-                <img src={n.picture} />   
-                {n.name}: {n.chat}            
-            </li>        
-        );
         let testUser = this.state.testUser.map((n, index) =>            
             <li key={index}>     
                 <img src={n.picture} />                

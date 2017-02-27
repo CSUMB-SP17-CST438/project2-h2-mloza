@@ -42,8 +42,9 @@ def on_connect():
             'picture': user.img,        
             'chat': user.chat, 
             'fbID': user.fbID,
+            'url': user.url,
         })
-        
+    # print all_chats
     socketio.emit('allchats', { 
         'chats': all_chats,
         
@@ -112,6 +113,7 @@ def on_new_chat_google(data):
             'name': 'Dragon-bot',        
             'picture': chatBotImg,        
             'chat': botChat,   
+            'url': '',
         })
         msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
         models.db.session.add(msg)
@@ -121,6 +123,7 @@ def on_new_chat_google(data):
         'name': json['name'],        
         'picture': json['picture'],        
         'chat': data['chat'],   
+        'url': '',
         })
         msg = models.Message(json['picture'], data['gID'], json['name'], data['chat'], '')
         models.db.session.add(msg)
@@ -175,29 +178,33 @@ def on_new_chat(data):
             'name': 'Dragon-bot',        
             'picture': chatBotImg,        
             'chat': botChat,   
+            'url': '',
         })
         msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
         models.db.session.add(msg)
         models.db.session.commit()
     elif posURL.scheme or posURL.netloc:
         print posURL.scheme + " " + posURL.netloc + " url"
-        # all_chats.append({        
-        # 'name': json['name'],        
-        # 'picture': json['picture']['data']['url'],        
-        # 'chat':  data['chat'],   
-        # })
-        # msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'Y')
-        # models.db.session.add(msg)
-        # models.db.session.commit()
+        all_chats.append({        
+            'name': json['name'],        
+            'picture': json['picture']['data']['url'],        
+            'chat':  data['chat'], 
+            'url': 'Y',
+        })
+        msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'Y')
+        models.db.session.add(msg)
+        models.db.session.commit()
     else:
         all_chats.append({        
         'name': json['name'],        
         'picture': json['picture']['data']['url'],        
-        'chat': data['chat'],   
+        'chat': data['chat'],
+        'url': '',
         })
         msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], '')
         models.db.session.add(msg)
         models.db.session.commit()
+    # print all_chats
     socketio.emit('all chats', { 
         'chats': all_chats,
     }, broadcast=True)
@@ -217,7 +224,8 @@ def fbConnection(data):
     all_chats.append({        
         'name': 'Dragon-bot',        
         'picture': chatBotImg,        
-        'chat': botChat,   
+        'chat': botChat,  
+        'url': '',
     })
     msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
@@ -273,7 +281,8 @@ def gConnection(data):
     all_chats.append({        
         'name': 'Dragon-bot',        
         'picture': chatBotImg,        
-        'chat': botChat,   
+        'chat': botChat,  
+        'url': '',
     })
     msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
@@ -349,7 +358,8 @@ def fbDisconnection(data):
     all_chats.append({        
         'name': 'Dragon-bot',        
         'picture': chatBotImg,        
-        'chat': botChat,   
+        'chat': botChat, 
+        'url': '',
     })
     msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
@@ -389,6 +399,7 @@ def gDisconnection(data):
         'name': 'Dragon-bot',        
         'picture': chatBotImg,        
         'chat': botChat,   
+        'url': '',
     })
     msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
