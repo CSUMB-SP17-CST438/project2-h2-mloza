@@ -11,11 +11,13 @@ class Message(db.Model):
     fbID = db.Column(db.String(150))
     user = db.Column(db.String(120))
     chat = db.Column(db.Text)
-    def __init__(self, i, f, u, c):
+    url = db.Column(db.String(5))
+    def __init__(self, i, f, u, c, ur):
         self.img = i
         self.fbID = f
         self.user = u
         self.chat = c
+        self.url = ur
     def __repr__(self): # what's __repr__?
         return '<Message chat: %s>' % self.chat
 

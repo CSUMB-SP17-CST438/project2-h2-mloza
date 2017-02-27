@@ -113,7 +113,7 @@ def on_new_chat_google(data):
             'picture': chatBotImg,        
             'chat': botChat,   
         })
-        msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+        msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
         models.db.session.add(msg)
         models.db.session.commit()
     else:
@@ -122,7 +122,7 @@ def on_new_chat_google(data):
         'picture': json['picture'],        
         'chat': data['chat'],   
         })
-        msg = models.Message(json['picture'], data['gID'], json['name'], data['chat'])
+        msg = models.Message(json['picture'], data['gID'], json['name'], data['chat'], '')
         models.db.session.add(msg)
         models.db.session.commit()
     socketio.emit('all chats', { 
@@ -143,17 +143,17 @@ def on_new_chat(data):
     print json["id"]
     
     posURL = urlparse(data['chat'])  
-    if posURL.scheme or posURL.netloc:
-        # valid url
-        print posURL.scheme + " " + posURL.netloc + " url"
-        # all_chats.append({        
-        # 'name': json['name'],        
-        # 'picture': json['picture']['data']['url'],        
-        # 'chat':  "<a href=data['chat'] >data['chat']</a>",   
-        # })
-        # msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], "<a href=data['chat'] >data['chat']</a>")
-        # models.db.session.add(msg)
-        # models.db.session.commit()
+    # if posURL.scheme or posURL.netloc:
+    #     # valid url
+    #     print posURL.scheme + " " + posURL.netloc + " url"
+    #     all_chats.append({        
+    #     'name': json['name'],        
+    #     'picture': json['picture']['data']['url'],        
+    #     'chat':  data['chat'],   
+    #     })
+    #     msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'Y')
+    #     models.db.session.add(msg)
+    #     models.db.session.commit()
         
     
     if data['chat'].find("!!", 0, 2) != -1:
@@ -176,16 +176,26 @@ def on_new_chat(data):
             'picture': chatBotImg,        
             'chat': botChat,   
         })
-        msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+        msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
         models.db.session.add(msg)
         models.db.session.commit()
+    elif posURL.scheme or posURL.netloc:
+        print posURL.scheme + " " + posURL.netloc + " url"
+        # all_chats.append({        
+        # 'name': json['name'],        
+        # 'picture': json['picture']['data']['url'],        
+        # 'chat':  data['chat'],   
+        # })
+        # msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'Y')
+        # models.db.session.add(msg)
+        # models.db.session.commit()
     else:
         all_chats.append({        
         'name': json['name'],        
         'picture': json['picture']['data']['url'],        
         'chat': data['chat'],   
         })
-        msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'])
+        msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], '')
         models.db.session.add(msg)
         models.db.session.commit()
     socketio.emit('all chats', { 
@@ -209,7 +219,7 @@ def fbConnection(data):
         'picture': chatBotImg,        
         'chat': botChat,   
     })
-    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
     models.db.session.commit()
     
@@ -265,7 +275,7 @@ def gConnection(data):
         'picture': chatBotImg,        
         'chat': botChat,   
     })
-    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
     models.db.session.commit()
     
@@ -341,7 +351,7 @@ def fbDisconnection(data):
         'picture': chatBotImg,        
         'chat': botChat,   
     })
-    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
     models.db.session.commit()
     
@@ -380,7 +390,7 @@ def gDisconnection(data):
         'picture': chatBotImg,        
         'chat': botChat,   
     })
-    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat)
+    msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
     models.db.session.add(msg)
     models.db.session.commit()
     
