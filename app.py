@@ -4,7 +4,8 @@ import flask_socketio
 import requests
 import flask_sqlalchemy
 from flask import request
-
+# from rfc3987 import parse
+from urlparse import urlparse
 
 
 app = flask.Flask(__name__)
@@ -86,7 +87,7 @@ def on_disconnect():
         
     
 @socketio.on('new chat google')
-def on_new_chat(data):
+def on_new_chat_google(data):
     response = requests.get( 
     'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_user_token'])    
     json = response.json()
@@ -141,6 +142,19 @@ def on_new_chat(data):
     json = response.json()
     print json["id"]
     
+    posURL = urlparse(data['chat'])  
+    if posURL.scheme or posURL.netloc:
+        # valid url
+        print posURL.scheme + " " + posURL.netloc + " url"
+        # all_chats.append({        
+        # 'name': json['name'],        
+        # 'picture': json['picture']['data']['url'],        
+        # 'chat':  "<a href=data['chat'] >data['chat']</a>",   
+        # })
+        # msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], "<a href=data['chat'] >data['chat']</a>")
+        # models.db.session.add(msg)
+        # models.db.session.commit()
+        
     
     if data['chat'].find("!!", 0, 2) != -1:
         print " DRAGON "
@@ -188,9 +202,6 @@ def fbConnection(data):
     json = response.json()
     flag = False;
     
-    socketio.emit('logFB', { 
-        'fbLoginFlag': data['fbLoginFlag'],
-    })
     
     botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
     all_chats.append({        
@@ -247,9 +258,6 @@ def gConnection(data):
     print "test"
     print "Got an event for new number with data:", data
     
-    socketio.emit('logG', { 
-        'gLoginFlag': data['gLoginFlag'],
-    })
     
     botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
     all_chats.append({        
@@ -312,9 +320,6 @@ def fbDisconnection(data):
     models.db.session.delete(offlineUser)
     models.db.session.commit()
     
-    socketio.emit('logFB', { 
-        'fbLoginFlag': data['fbLoginFlag'],
-    })
     
     users = models.Users.query.all()
     del all_online_users[:]
@@ -354,9 +359,6 @@ def gDisconnection(data):
     models.db.session.delete(offlineUser)
     models.db.session.commit()
     
-    socketio.emit('logG', { 
-        'gLoginFlag': data['gLoginFlag'],
-    })
     
     users = models.Users.query.all()
     del all_online_users[:]

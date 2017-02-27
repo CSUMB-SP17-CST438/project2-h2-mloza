@@ -30,7 +30,6 @@ export class Logout extends React.Component {
                console.log(response.authResponse.userID);
                 Socket.emit('fbDisconnected', {                    
                     'userID': response.authResponse.userID,
-                    'fbLoginFlag': false,
                 });
             }        
         });

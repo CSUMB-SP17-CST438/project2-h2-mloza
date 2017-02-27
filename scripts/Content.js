@@ -15,8 +15,6 @@ export class Content extends React.Component {
             'testChat': [],
             'testUser': [],
             'testOnlineNum': 0,
-            'fbLoginFlag': false,
-            'gLoginFlag': false,
         };
          
     }
@@ -26,29 +24,6 @@ export class Content extends React.Component {
     componentDidMount() {
         
         
-        
-        Socket.on('logFB', (data) => {
-            this.setState({
-                'fbLoginFlag': data['fbLoginFlag'],
-                
-            });
-             console.log(this.state.gLoginFlag);
-            console.log(this.state.fbLoginFlag);
-        
-        })
-        
-        console.log(this.state.gLoginFlag);
-            console.log(this.state.fbLoginFlag);
-        
-        Socket.on('logG', (data) => {
-            this.setState({
-                'gLoginFlag': data['gLoginFlag'],
-                
-            });
-             console.log(this.state.gLoginFlag);
-            console.log(this.state.fbLoginFlag);
-        
-        })
         
         Socket.on('all chats', (data) => {
             this.setState({
