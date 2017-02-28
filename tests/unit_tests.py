@@ -18,7 +18,10 @@ class UrlTest(unittest.TestCase):
     def test_valid_url(self):
         r = testFunctions.get_url('http://www.google.com')
         self.assertEqual('valid', r)
-
+        
+    def test_valid_img(self):
+        r = testFunctions.get_image('https://media.giphy.com/media/X2QBmjCQAHtle/giphy.gif')
+        self.assertEqual('valid', r)
 
 if __name__ == '__main__':
     unittest.main()

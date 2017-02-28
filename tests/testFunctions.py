@@ -31,4 +31,14 @@ def get_url(msg):
         return "valid"
     else:
         return "not valid"
+        
+def get_image(msg):
+    if (get_url(msg) == 'valid'):
+        image = requests.head(msg)
+        img = image.headers.get('content-type')
+        if (img == "image/gif" or img == "image/png" or img == "image/jpeg"):
+            return "valid"
+        else:
+            return "not valid"
+
     
