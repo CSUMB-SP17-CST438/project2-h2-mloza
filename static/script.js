@@ -13188,7 +13188,7 @@ var Content = exports.Content = function (_React$Component) {
         key: 'render',
         value: function render() {
             var testChat = this.state.testChat.map(function (n, index) {
-                if (n.url == 'Y') {
+                if (n.url == 'U') {
                     return React.createElement(
                         'li',
                         { key: index },
@@ -13200,6 +13200,15 @@ var Content = exports.Content = function (_React$Component) {
                             { href: n.chat, target: '_blank' },
                             n.chat
                         )
+                    );
+                } else if (n.url == 'I') {
+                    return React.createElement(
+                        'li',
+                        { key: index },
+                        React.createElement('img', { src: n.picture }),
+                        n.name,
+                        ': ',
+                        React.createElement('img', { src: n.chat })
                     );
                 } else {
                     return React.createElement(

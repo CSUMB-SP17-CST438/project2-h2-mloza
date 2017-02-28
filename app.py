@@ -6,6 +6,8 @@ import flask_sqlalchemy
 from flask import request
 # from rfc3987 import parse
 from urlparse import urlparse
+import re
+import imghdr
 
 
 app = flask.Flask(__name__)
@@ -18,6 +20,8 @@ ip = [];
 all_chats = [];
 all_online_users = [];
 all_possible_online_users = [];
+imageType = ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "gif", "GIF"]
+imgType = ["image/jpeg", "image/png", "image/gif"]
 chatBotImg = 'https://lh4.googleusercontent.com/vnCZbUminSYgNXsQdiQffUnjXa0XMnIS0_rqkynkjZb5_dM8jVfvAN68MuCRRCC4HYYMxXgp=s50-h50-e365'
 # chatBotImg = 'http://a.deviantart.net/avatars/s/a/sandara.jpg'
     
@@ -154,7 +158,7 @@ def on_new_chat(data):
     #     'picture': json['picture']['data']['url'],        
     #     'chat':  data['chat'],   
     #     })
-    #     msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'Y')
+    #     msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'U')
     #     models.db.session.add(msg)
     #     models.db.session.commit()
         
@@ -184,16 +188,30 @@ def on_new_chat(data):
         models.db.session.add(msg)
         models.db.session.commit()
     elif posURL.scheme or posURL.netloc:
-        print posURL.scheme + " " + posURL.netloc + " url"
-        all_chats.append({        
-            'name': json['name'],        
-            'picture': json['picture']['data']['url'],        
-            'chat':  data['chat'], 
-            'url': 'Y',
-        })
-        msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'Y')
-        models.db.session.add(msg)
-        models.db.session.commit()
+        image = requests.head(data['chat'])
+        posImg = image.headers.get('content-type')
+        if (posImg == "image/gif" or posImg == "image/png" or posImg == "image/jpeg"):
+            print "image"
+            all_chats.append({        
+                'name': json['name'],        
+                'picture': json['picture']['data']['url'],        
+                'chat':  data['chat'], 
+                'url': 'I',
+            })
+            msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'I')
+            models.db.session.add(msg)
+            models.db.session.commit()
+        else:
+            # print posURL.scheme + " " + posURL.netloc + " url"
+            all_chats.append({        
+                'name': json['name'],        
+                'picture': json['picture']['data']['url'],        
+                'chat':  data['chat'], 
+                'url': 'U',
+            })
+            msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'U')
+            models.db.session.add(msg)
+            models.db.session.commit()
     else:
         all_chats.append({        
         'name': json['name'],        

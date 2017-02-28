@@ -91,13 +91,20 @@ export class Content extends React.Component {
     
     render() {
         let testChat = this.state.testChat.map(function(n, index) { 
-                if (n.url == 'Y') {
+                if (n.url == 'U') {
                     return <li key={index}>                
                         <img src={n.picture} /> 
                         {n.name}: <a href={n.chat} target="_blank">{n.chat}</a>
                                     
                     </li>  
-                } else {
+                } else if (n.url == 'I') {
+                    return <li key={index}>                
+                        <img src={n.picture} /> 
+                        {n.name}: <img src={n.chat} />
+                                    
+                    </li>
+                }
+                else {
                     return <li key={index}>                
                         <img src={n.picture} /> 
                         {n.name}: 
