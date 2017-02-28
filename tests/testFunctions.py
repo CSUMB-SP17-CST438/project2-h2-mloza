@@ -27,4 +27,8 @@ def get_say_command(msg):
         
 def get_url(msg):
     test = urlparse(msg)
+    if (test.scheme or test.netloc):
+        return "valid"
+    else:
+        return "not valid"
     

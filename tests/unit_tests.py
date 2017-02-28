@@ -13,6 +13,11 @@ class ChatbotResponseTest(unittest.TestCase):
     def test_say_command(self):
         r = testFunctions.get_say_command('!! say')
         self.assertEqual('say found', r)
+        
+class UrlTest(unittest.TestCase):
+    def test_valid_url(self):
+        r = testFunctions.get_url('http://www.google.com')
+        self.assertEqual('valid', r)
 
 
 if __name__ == '__main__':
