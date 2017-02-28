@@ -44,6 +44,12 @@ def get_rawr_command(msg):
     else:
         return "rawr not found"
         
+def get_eat_command(msg):
+    if msg == '!! eat':
+        return "eat found"
+    else:
+        return "eat not found"
+        
 def get_url(msg):
     test = urlparse(msg)
     if (test.scheme or test.netloc):

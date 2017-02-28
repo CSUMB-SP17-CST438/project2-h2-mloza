@@ -26,6 +26,10 @@ class ChatbotResponseTest(unittest.TestCase):
         r = testFunctions.get_rawr_command('!! rawr')
         self.assertEqual('rawr found', r)
         
+    def test_eat_command(self):
+        r = testFunctions.get_eat_command('!! eat')
+        self.assertEqual('eat found', r)
+        
         
 class UrlTest(unittest.TestCase):
     def test_valid_url(self):
