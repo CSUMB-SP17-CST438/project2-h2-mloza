@@ -18,6 +18,10 @@ class ChatbotResponseTest(unittest.TestCase):
         r = testFunctions.get_about_command('!! about')
         self.assertEqual('about found', r)
         
+    def test_help_command(self):
+        r = testFunctions.get_help_command('!! help')
+        self.assertEqual('help found', r)
+        
         
 class UrlTest(unittest.TestCase):
     def test_valid_url(self):

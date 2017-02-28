@@ -32,6 +32,12 @@ def get_about_command(msg):
     else:
         return "about not found"
         
+def get_help_command(msg):
+    if msg == '!! help':
+        return "help found"
+    else:
+        return "help not found"
+        
 def get_url(msg):
     test = urlparse(msg)
     if (test.scheme or test.netloc):
