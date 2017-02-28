@@ -13,7 +13,8 @@ def get_specific_command(msg):
     hlp = msg.find("!! help", 0, 6)
     rawr = msg.find("!! rawr", 0, 6)
     eat = msg.find("!! eat", 0, 6)
-    if (about == -1) or (hlp == -1) or (rawr == -1) or (eat == -1):
+    say = msg.find("!! sat", 0, 6)
+    if (about == -1) or (hlp == -1) or (rawr == -1) or (eat == -1) or (say == -1):
         return "found"
     else:
         return "unknown"
@@ -24,6 +25,12 @@ def get_say_command(msg):
         return "say found"
     else:
         return "say not found"
+        
+def get_about_command(msg):
+    if msg == '!! about':
+        return "about found"
+    else:
+        return "about not found"
         
 def get_url(msg):
     test = urlparse(msg)
