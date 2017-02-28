@@ -164,7 +164,7 @@ def on_new_chat(data):
         
     
     if data['chat'].find("!!", 0, 2) != -1:
-        print " DRAGON "
+        # print " DRAGON "
         if data['chat'].find("!! say", 0, 6) != -1:
             botChat = data['chat'][7:]
         else:
