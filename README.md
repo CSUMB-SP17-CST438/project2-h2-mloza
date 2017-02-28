@@ -1,4 +1,4 @@
-# project2-h1-mloza
+# project2-h2-mloza
 
 ## Theme 
 Hope
