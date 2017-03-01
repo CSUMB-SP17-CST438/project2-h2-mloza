@@ -179,11 +179,17 @@ def on_new_chat(data):
             foodName = food[0]
             foodLoc = food[1]
             url = "https://api.yelp.com/v2/search?term="+foodName+"&location="+foodLoc+"&limit=40" 
+            # oauth = requests_oauthlib.OAuth1(
+            #     'P9HpnKvg3flN6o1KrsHgxw', 
+            #     'uJm6epI8CUT968OQc_8K0xBR9PQ',
+            #     'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
+            #     'V_SBhCGKhBruxND3mswQC1pYCYE'
+            # )
             oauth = requests_oauthlib.OAuth1(
-                'P9HpnKvg3flN6o1KrsHgxw', 
-                'uJm6epI8CUT968OQc_8K0xBR9PQ',
-                'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
-                'V_SBhCGKhBruxND3mswQC1pYCYE'
+                os.getenv("YELP_CONSUMER_KEY"), 
+                os.getenv("YELP_CONSUMER_SECRET_KEY"),
+                os.getenv("YELP_TOKEN_KEY"),
+                os.getenv("YELP_TOKEN_SECRET_KEY")
             )
             response = requests.get(url, auth=oauth)
             json_body = response.json()
