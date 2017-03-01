@@ -8,6 +8,9 @@ from flask import request
 from urlparse import urlparse
 import re
 import imghdr
+import requests_oauthlib
+import json
+# import Oauth1Authenticator
 
 
 app = flask.Flask(__name__)
@@ -106,9 +109,11 @@ def on_new_chat_google(data):
             if data['chat'] == "!! about":
                 botChat = "Hello! I am Dragon-bot. This is a fun place to chat."
             elif data['chat'] == "!! help":
-                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat"
+                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat \n!! food <type> <location>"
             elif data['chat'] == "!! rawr":
                 botChat = "RAAAAWR!!!"
+            elif data['chat'] == "!! food":
+                botChat = "coming soon"
             elif data['chat'] == "!! eat":
                 botChat = "FREE FOOD! Thank you!"
             else:
@@ -171,11 +176,29 @@ def on_new_chat(data):
             if data['chat'] == "!! about":
                 botChat = "Hello! I am Dragon-bot. This is a fun place to chat."
             elif data['chat'] == "!! help":
-                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat"
+                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat\n!! food <type> <location>"
             elif data['chat'] == "!! rawr":
                 botChat = "RAAAAWR!!!"
             elif data['chat'] == "!! eat":
                 botChat = "FREE FOOD! Thank you!"
+            elif data['chat'] == "!! food":
+                botChat = "coming soon"
+                url = "https://api.yelp.com/v2/search?term=food&location=San+Francisco" 
+                # oauth = Oauth1Authenticator(
+                #     consumer_key='P9HpnKvg3flN6o1KrsHgxw',
+                #     consumer_secret='uJm6epI8CUT968OQc_8K0xBR9PQ',
+                #     token='eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
+                #     token_secret='V_SBhCGKhBruxND3mswQC1pYCYE'
+                # )
+                oauth = requests_oauthlib.OAuth1(
+                    'P9HpnKvg3flN6o1KrsHgxw', 
+                    'uJm6epI8CUT968OQc_8K0xBR9PQ',
+                    'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
+                    'V_SBhCGKhBruxND3mswQC1pYCYE'
+                )
+                response = requests.get(url, auth=oauth)
+                json_body =  response.json()
+                # print json_body
             else:
                 botChat = "Nope! Check out !! help"
         all_chats.append({        
