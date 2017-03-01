@@ -29,15 +29,6 @@ class SocketIOTests(unittest.TestCase):
         # print server_msg
         self.assertEquals(server_msg['name'], 'allusers')
         
-    # def test_emit(self):
-    #     all_chats = []
-    #     client = app.socketio.test_client(app.app)
-    #     client.emit('new chat', {
-    #         'all_chats': 'test'
-    #     })
-    #     r = client.get_received()
-    #     print r
-        
     def test_on_new_chat(self):
         client = app.socketio.test_client(app.app)
         r = client.get_received()
