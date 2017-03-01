@@ -39,6 +39,11 @@ class UrlTest(unittest.TestCase):
     def test_valid_img(self):
         r = testFunctions.get_image('https://media.giphy.com/media/X2QBmjCQAHtle/giphy.gif')
         self.assertEqual('valid', r)
+        
+class SplittingText(unittest.TestCase):
+    def test_splitting(self):
+        r = testFunctions.split('sushi Seaside, CA')
+        self.assertEqual(2, len(r))
 
 if __name__ == '__main__':
     unittest.main()

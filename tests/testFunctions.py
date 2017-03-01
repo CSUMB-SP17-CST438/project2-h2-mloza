@@ -65,5 +65,11 @@ def get_image(msg):
             return "valid"
         else:
             return "not valid"
+            
+def split(msg):
+    arr = []
+    t = msg[8:]
+    arr = t.split(' ', 1)
+    return arr
 
     

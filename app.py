@@ -174,7 +174,6 @@ def on_new_chat(data):
         if data['chat'].find("!! say", 0, 6) != -1:
             botChat = data['chat'][7:]
         elif data['chat'].find("!! food", 0, 7) != -1:
-            
             foodMsg = data['chat'][8:]
             food = foodMsg.split(' ', 1)
             foodName = food[0]
