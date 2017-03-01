@@ -9,6 +9,7 @@ import re
 import imghdr
 import requests_oauthlib
 import json
+import random
 
 
 app = flask.Flask(__name__)
@@ -181,7 +182,7 @@ def on_new_chat(data):
                 botChat = "FREE FOOD! Thank you!"
             elif data['chat'] == "!! food":
                 botChat = "coming soon"
-                url = "https://api.yelp.com/v2/search?term=sushi&location=Monterey, CA&limit=1" 
+                url = "https://api.yelp.com/v2/search?term=sushi&location=Monterey, CA&limit=40" 
                 oauth = requests_oauthlib.OAuth1(
                     'P9HpnKvg3flN6o1KrsHgxw', 
                     'uJm6epI8CUT968OQc_8K0xBR9PQ',
@@ -190,11 +191,12 @@ def on_new_chat(data):
                 )
                 response = requests.get(url, auth=oauth)
                 json_body = response.json()
-                name = json_body["businesses"][0]["name"]
-                yelpURL = json_body["businesses"][0]["url"]
-                phone = json_body["businesses"][0]["display_phone"]
-                foodStreet = json_body["businesses"][0]["location"]["display_address"][0]
-                foodCity = json_body["businesses"][0]["location"]["display_address"][1]
+                randNum = random.randint(0, 39) #only 40 hits are returned
+                name = json_body["businesses"][randNum]["name"]
+                yelpURL = json_body["businesses"][randNum]["url"]
+                phone = json_body["businesses"][randNum]["display_phone"]
+                foodStreet = json_body["businesses"][randNum]["location"]["display_address"][0]
+                foodCity = json_body["businesses"][randNum]["location"]["display_address"][1]
                 botChat = yelpURL
                 all_chats.append({        
                     'name': 'Dragon-bot',        
@@ -202,7 +204,7 @@ def on_new_chat(data):
                     'chat': botChat,   
                     'url': 'U',
                 })
-                msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
+                msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, 'U')
                 models.db.session.add(msg)
                 models.db.session.commit()
                 botChat = name + " " + foodStreet + " " + foodCity + " " + phone
