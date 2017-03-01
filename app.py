@@ -22,6 +22,7 @@ ip = [];
 all_chats = [];
 all_online_users = [];
 all_possible_online_users = [];
+food = []
 imageType = ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "gif", "GIF"]
 imgType = ["image/jpeg", "image/png", "image/gif"]
 chatBotImg = 'https://lh4.googleusercontent.com/vnCZbUminSYgNXsQdiQffUnjXa0XMnIS0_rqkynkjZb5_dM8jVfvAN68MuCRRCC4HYYMxXgp=s50-h50-e365'
@@ -173,8 +174,12 @@ def on_new_chat(data):
         if data['chat'].find("!! say", 0, 6) != -1:
             botChat = data['chat'][7:]
         elif data['chat'].find("!! food", 0, 7) != -1:
-            food = data['chat'][8:]
-            url = "https://api.yelp.com/v2/search?term="+food+"&location=Monterey, CA&limit=40" 
+            
+            foodMsg = data['chat'][8:]
+            food = foodMsg.split(' ', 1)
+            foodName = food[0]
+            foodLoc = food[1]
+            url = "https://api.yelp.com/v2/search?term="+foodName+"&location="+foodLoc+"&limit=40" 
             oauth = requests_oauthlib.OAuth1(
                 'P9HpnKvg3flN6o1KrsHgxw', 
                 'uJm6epI8CUT968OQc_8K0xBR9PQ',
@@ -200,6 +205,8 @@ def on_new_chat(data):
             models.db.session.add(msg)
             models.db.session.commit()
             botChat = name + " " + foodStreet + " " + foodCity + " " + phone
+            if not food:
+                del food[:]
         else:
             if data['chat'] == "!! about":
                 botChat = "Hello! I am Dragon-bot. This is a fun place to chat."
