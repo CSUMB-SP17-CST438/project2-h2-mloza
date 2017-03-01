@@ -4,13 +4,11 @@ import flask_socketio
 import requests
 import flask_sqlalchemy
 from flask import request
-# from rfc3987 import parse
 from urlparse import urlparse
 import re
 import imghdr
 import requests_oauthlib
 import json
-# import Oauth1Authenticator
 
 
 app = flask.Flask(__name__)
@@ -184,12 +182,6 @@ def on_new_chat(data):
             elif data['chat'] == "!! food":
                 botChat = "coming soon"
                 url = "https://api.yelp.com/v2/search?term=food&location=San+Francisco" 
-                # oauth = Oauth1Authenticator(
-                #     consumer_key='P9HpnKvg3flN6o1KrsHgxw',
-                #     consumer_secret='uJm6epI8CUT968OQc_8K0xBR9PQ',
-                #     token='eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
-                #     token_secret='V_SBhCGKhBruxND3mswQC1pYCYE'
-                # )
                 oauth = requests_oauthlib.OAuth1(
                     'P9HpnKvg3flN6o1KrsHgxw', 
                     'uJm6epI8CUT968OQc_8K0xBR9PQ',
