@@ -13,6 +13,12 @@ class SocketIOTests(unittest.TestCase):
         # print server_msg
         
         
+    def test_on_disconnect(self):
+        client = app.socketio.test_client(app.app)
+        r = client.disconnect()
+        self.assertEqual(r, None)
+        
+        
     # def test_fbDisconnection(self):
     #     client = app.socketio.test_client(app.app)
     #     r = client.get_received()
