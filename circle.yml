@@ -1,4 +1,10 @@
 test:
     override:
         - python -m tests/unit_tests
-        - python -m tests/socketio_tests
+        # - python -m tests/socketio_tests
+        
+deployment:
+    production:
+        branch: master
+        heroku:
+            appname: rocky-waters-83090
