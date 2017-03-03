@@ -13231,13 +13231,24 @@ var Content = exports.Content = function (_React$Component) {
             }.bind(this));
 
             var testUser = this.state.testUser.map(function (n, index) {
-                return React.createElement(
-                    'li',
-                    { key: index },
-                    React.createElement('img', { id: 'profPic', src: n.picture }),
-                    n.name
-                );
-            });
+                if (n.media == 'FB') {
+                    return React.createElement(
+                        'li',
+                        { id: 'userContainer', key: index },
+                        React.createElement('img', { id: 'profPic', src: n.picture }),
+                        React.createElement('img', { id: 'media', src: 'https://images.seeklogo.net/2011/06/facebook-icon-logo-vector-400x400.png' }),
+                        n.name
+                    );
+                } else {
+                    return React.createElement(
+                        'li',
+                        { id: 'userContainer', key: index },
+                        React.createElement('img', { id: 'profPic', src: n.picture }),
+                        React.createElement('img', { id: 'media', src: 'https://images.seeklogo.net/2015/09/google-favicon-vector.png' }),
+                        n.name
+                    );
+                }
+            }.bind(this));
 
             return React.createElement(
                 'div',

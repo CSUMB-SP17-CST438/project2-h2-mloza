@@ -62,7 +62,8 @@ def on_connect():
     for user in users:
         all_online_users.append({        
             'name': user.user,        
-            'picture': user.img,        
+            'picture': user.img, 
+            'media': user.media,
             'fbID': user.fbID,   
         })
     for user in all_online_users:
@@ -334,7 +335,8 @@ def fbConnection(data):
     for user in users:
         all_online_users.append({        
             'name': user.user,        
-            'picture': user.img,        
+            'picture': user.img,   
+            'media': user.media,
             'fbID': user.fbID,   
         })
     
@@ -348,10 +350,11 @@ def fbConnection(data):
         all_online_users.append({
                 'name': json['name'],        
                 'picture': json['picture']['data']['url'],
+                'media': 'FB',
             })
         for usr in all_online_users:
             print "all online: " + usr['name']
-        usr = models.Users(json['picture']['data']['url'], json['id'], json['name'], request.sid)
+        usr = models.Users(json['picture']['data']['url'], json['id'], 'FB', json['name'], request.sid)
         models.db.session.add(usr)
         models.db.session.commit()
     socketio.emit('fbConn', { 
@@ -390,7 +393,8 @@ def gConnection(data):
     for user in users:
         all_online_users.append({        
             'name': user.user,        
-            'picture': user.img,        
+            'picture': user.img,
+            'media': user.media,
             'fbID': user.fbID,   
         })
         
@@ -404,10 +408,11 @@ def gConnection(data):
         all_online_users.append({
                 'name': json['name'],        
                 'picture': json['picture'],
+                'media': 'G'
             })
         for usr in all_online_users:
             print "all online: " + usr['name']
-        usr = models.Users(json['picture'], data['gID'], json['name'], request.sid)
+        usr = models.Users(json['picture'], data['gID'], 'G', json['name'], request.sid)
         models.db.session.add(usr)
         models.db.session.commit()
         
@@ -438,7 +443,8 @@ def fbDisconnection(data):
     for user in users:
         all_online_users.append({        
             'name': user.user,        
-            'picture': user.img,        
+            'picture': user.img,  
+            'media': user.media,
             'fbID': user.fbID,   
         })
     
@@ -478,7 +484,8 @@ def gDisconnection(data):
     for user in users:
         all_online_users.append({        
             'name': user.user,        
-            'picture': user.img,        
+            'picture': user.img, 
+            'media': user.media,
             'fbID': user.fbID,   
         })
     

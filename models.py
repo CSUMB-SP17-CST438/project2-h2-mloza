@@ -25,11 +25,13 @@ class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True) # key
     img = db.Column(db.String(150))
     fbID = db.Column(db.String(150))
+    media = db.Column(db.String(50))
     user = db.Column(db.String(120))
     ip = db.Column(db.String(120))
-    def __init__(self, i, f, u, p):
+    def __init__(self, i, f, m, u, p):
         self.img = i
         self.fbID = f
+        self.media = m
         self.user = u
         self.ip = p
     def __repr__(self): # what's __repr__?

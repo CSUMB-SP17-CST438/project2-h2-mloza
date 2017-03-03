@@ -119,12 +119,21 @@ export class Content extends React.Component {
                    
         }.bind(this));
         
-        let testUser = this.state.testUser.map((n, index) =>            
-            <li key={index}>     
-                <img id="profPic" src={n.picture} />                
-                {n.name}            
-            </li>        
-        );
+        let testUser = this.state.testUser.map(function(n, index) {   
+            if (n.media == 'FB') {
+                return <li id="userContainer" key={index}>     
+                    <img id="profPic" src={n.picture} />     
+                    <img id="media" src="https://images.seeklogo.net/2011/06/facebook-icon-logo-vector-400x400.png" />
+                    {n.name}       
+                </li> 
+            } else {
+                return <li id="userContainer" key={index}>     
+                    <img id="profPic" src={n.picture} />     
+                    <img id="media" src="https://images.seeklogo.net/2015/09/google-favicon-vector.png" />
+                    {n.name}      
+                </li> 
+            }
+        }.bind(this));
         
         
         return (

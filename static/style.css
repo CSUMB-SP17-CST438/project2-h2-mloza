@@ -42,6 +42,18 @@ input {
     max-height: 250px;
 }
 
+#userContainer {
+    position: relative;
+}
+
+#media {
+    width: 15px;
+    height: 15px;
+    top: 36px;
+    left: 36px;
+    position: absolute;
+}
+
 #clear {
     clear: both;
 }
