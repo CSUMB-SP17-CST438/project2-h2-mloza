@@ -10,9 +10,9 @@ class ServerIntegrationTestCase(flask_testing.LiveServerTestCase):
     def create_app(self):
         return app.app
 
-    def test_server_is_running(self):
-        r = urllib2.urlopen(self.get_server_url())
-        self.assertEqual(r.code, 200)
+    # def test_server_is_running(self):
+    #     r = urllib2.urlopen(self.get_server_url())
+    #     self.assertEqual(r.code, 200)
         
     def test_server_render(self):
         r = requests.get(self.get_server_url()) 
