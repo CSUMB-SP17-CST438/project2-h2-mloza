@@ -57,6 +57,10 @@ input {
     font-size: 14px;
 }
 
+#gLogin, #gLogout {
+    font-size: 14px;
+}
+
 #profPic {
     width: 50px;
     height: 50px;
