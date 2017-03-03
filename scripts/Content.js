@@ -27,7 +27,8 @@ export class Content extends React.Component {
             gapi.auth2.init();
         });
         
-        
+        // var objDiv = document.getElementById("chat");
+        // objDiv.scrollTop = objDiv.scrollHeight;
         
         Socket.on('all chats', (data) => {
             this.setState({

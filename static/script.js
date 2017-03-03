@@ -13148,6 +13148,9 @@ var Content = exports.Content = function (_React$Component) {
                 gapi.auth2.init();
             });
 
+            // var objDiv = document.getElementById("chat");
+            // objDiv.scrollTop = objDiv.scrollHeight;
+
             _Socket.Socket.on('all chats', function (data) {
                 _this2.setState({
                     'testChat': data['chats']
