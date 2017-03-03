@@ -3,10 +3,6 @@ test:
         - python -m tests/unit_tests
         - python -m tests/socketio_tests
         - python -m tests/integration_tests
-        
-# database:
-#   override:
-#     - mysql -u ubuntu circle_test < my-database-setup.sql
          
 deployment:
     production:
