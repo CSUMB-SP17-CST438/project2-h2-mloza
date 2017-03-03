@@ -109,7 +109,7 @@ def on_new_chat_google(data):
             if data['chat'] == "!! about":
                 botChat = "Hello! I am Dragon-bot. This is a fun place to chat."
             elif data['chat'] == "!! help":
-                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat \n!! food <sushi> <Monterey, CA>"
+                botChat = "!! about \n!! help \n!! say \n!! rawr \n!! eat \n!! food sushi Monterey, CA"
             elif data['chat'] == "!! rawr":
                 botChat = "RAAAAWR!!!"
             elif data['chat'] == "!! food":
