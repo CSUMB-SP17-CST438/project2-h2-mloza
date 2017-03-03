@@ -19,13 +19,13 @@ class SocketIOTests(unittest.TestCase):
         self.assertEqual(r, None)
         
         
-    # def test_fbDisconnection(self):
-    #     client = app.socketio.test_client(app.app)
-    #     r = client.get_received()
-    #     # print r
-    #     server_msg = r[1]
-    #     # print server_msg
-    #     self.assertEquals(server_msg['name'], 'allusers')
+    def test_fbDisconnection(self):
+        client = app.socketio.test_client(app.app)
+        r = client.get_received()
+        # print r
+        server_msg = r[1]
+        # print server_msg
+        self.assertEquals(server_msg['name'], 'allusers')
         
     # def test_gDisconnection(self):
     #     client = app.socketio.test_client(app.app)
