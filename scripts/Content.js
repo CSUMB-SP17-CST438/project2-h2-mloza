@@ -23,6 +23,10 @@ export class Content extends React.Component {
 
     componentDidMount() {
         
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+        
         
         
         Socket.on('all chats', (data) => {
