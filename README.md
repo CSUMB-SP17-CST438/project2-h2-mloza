@@ -1,28 +1,22 @@
 # project2-h2-mloza
 
 ## Theme 
-Hope
+Food
 
 ## How did you incorporate your theme within your project?
-The background image is a sprout growing from a dead tree.
+The background image is sushi and the API that Dragon-bot calls is Yelp for food places.
 
 ## Problems?
-Gosh. Where could I begin? Understanding React was an issue. But going over
-the documentation, it wasn't as stressful. It was just trying to get Socket
-with React. Luckily, someone explained it to me. I guess my main issue that
-I can remember, was the latest. I have custom buttons. It was harder to find
-the right code to make Google be nice with my buttons. But it finally worked.
-Google is amazing when one is stuck.
+The biggest two problems were Yelp and CircleCl.
 
-My online users are being counted by who actually logs in using the buttons
-and logouts with the log out buttons.
+I had issues setting up the OAuth for Yelp. I was following the setup from Facebook. It
+wasn't working. I looked around and tried a few but kept getting wrong setup erros. I 
+eventually tried Facebook's OAuth again. It works. I'm pretty sure it's because I copied
+the wrong key to the wrong spot.
 
-However, the only reason why this project was stressful was because I started
-working on it on the 15th. So it's my fault. However, I am quite pleased on
-how it turned out.
+CircleCl didn't like my socketio tests. It had issues connecting to my database. Someone
+from Slack suggested to add an enviroment variable in CircleCl for Heroku db. It now works,
+which makes sense. Lastly, integrations tests wouldn't allowing CircleCl to build. However,
+I finally realized that it was because that I forgot the - at the beginning. 
 
 ## How would you improve it if you had more time?
-I would make it more eye pleasing. I would also implement users being
-logged out when they exit the tab(s) using the session id.
-
-Thank you! I'm enjoying the web dev projects.
