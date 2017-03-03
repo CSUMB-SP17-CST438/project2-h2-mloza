@@ -56,6 +56,11 @@ input {
     border-radius: 5px;
 }
 
+#profPic {
+    width: 50px;
+    height: 50px;
+}
+
 textarea {
     resize: none;
     width: 1015px;

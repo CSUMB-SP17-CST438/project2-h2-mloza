@@ -13196,7 +13196,7 @@ var Content = exports.Content = function (_React$Component) {
                     return React.createElement(
                         'li',
                         { key: index },
-                        React.createElement('img', { src: n.picture }),
+                        React.createElement('img', { id: 'profPic', src: n.picture }),
                         n.name,
                         ': ',
                         React.createElement(
@@ -13209,7 +13209,7 @@ var Content = exports.Content = function (_React$Component) {
                     return React.createElement(
                         'li',
                         { key: index },
-                        React.createElement('img', { src: n.picture }),
+                        React.createElement('img', { id: 'profPic', src: n.picture }),
                         n.name,
                         ': ',
                         React.createElement('img', { src: n.chat })
@@ -13218,7 +13218,7 @@ var Content = exports.Content = function (_React$Component) {
                     return React.createElement(
                         'li',
                         { key: index },
-                        React.createElement('img', { src: n.picture }),
+                        React.createElement('img', { id: 'profPic', src: n.picture }),
                         n.name,
                         ':',
                         React.createElement(
@@ -13234,7 +13234,7 @@ var Content = exports.Content = function (_React$Component) {
                 return React.createElement(
                     'li',
                     { key: index },
-                    React.createElement('img', { src: n.picture }),
+                    React.createElement('img', { id: 'profPic', src: n.picture }),
                     n.name
                 );
             });
@@ -13421,9 +13421,11 @@ var Button = exports.Button = function (_React$Component) {
         value: function handleSubmit(event) {
             var _this2 = this;
 
+            var flag = false;
             event.preventDefault();
             FB.getLoginStatus(function (response) {
                 if (response.status == 'connected') {
+                    flag = true;
                     _Socket.Socket.emit('new chat', {
                         'facebook_user_token': response.authResponse.accessToken,
                         'chat': _this2.state.value
@@ -13433,20 +13435,22 @@ var Button = exports.Button = function (_React$Component) {
                 }
             });
 
-            var auth2 = gapi.auth2.getAuthInstance();
-            var user = auth2.currentUser.get();
-            if (user.isSignedIn()) {
+            if (!flag) {
+                var auth2 = gapi.auth2.getAuthInstance();
+                var user = auth2.currentUser.get();
+                if (user.isSignedIn()) {
 
-                console.log("yup");
-                console.log(user.getAuthResponse().id_token);
+                    console.log("yup");
+                    console.log(user.getAuthResponse().id_token);
 
-                _Socket.Socket.emit('new chat google', {
-                    'google_user_token': user.getAuthResponse().id_token,
-                    'gID': auth2.currentUser.get().getId(),
-                    'chat': this.state.value
+                    _Socket.Socket.emit('new chat google', {
+                        'google_user_token': user.getAuthResponse().id_token,
+                        'gID': auth2.currentUser.get().getId(),
+                        'chat': this.state.value
 
-                });
-                console.log("coolio");
+                    });
+                    console.log("coolio");
+                }
             }
 
             console.log('Sent up the chat to server!', this.state.value);

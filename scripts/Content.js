@@ -97,20 +97,20 @@ export class Content extends React.Component {
         let testChat = this.state.testChat.map(function(n, index) { 
                 if (n.url == 'U') {
                     return <li key={index}>                
-                        <img src={n.picture} /> 
+                        <img id="profPic" src={n.picture} /> 
                         {n.name}: <a href={n.chat} target="_blank">{n.chat}</a>
                                     
                     </li>  
                 } else if (n.url == 'I') {
                     return <li key={index}>                
-                        <img src={n.picture} /> 
+                        <img id="profPic" src={n.picture} /> 
                         {n.name}: <img src={n.chat} />
                                     
                     </li>
                 }
                 else {
                     return <li key={index}>                
-                        <img src={n.picture} /> 
+                        <img id="profPic" src={n.picture} /> 
                         {n.name}: 
                         <span>{n.chat}</span>
                                     
@@ -121,7 +121,7 @@ export class Content extends React.Component {
         
         let testUser = this.state.testUser.map((n, index) =>            
             <li key={index}>     
-                <img src={n.picture} />                
+                <img id="profPic" src={n.picture} />                
                 {n.name}            
             </li>        
         );

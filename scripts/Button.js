@@ -12,9 +12,11 @@ export class Button extends React.Component {
   }
   
     handleSubmit(event) {
+        var flag = false;
         event.preventDefault();
         FB.getLoginStatus((response) => {            
-            if (response.status == 'connected') {                
+            if (response.status == 'connected') {   
+                flag = true;
                 Socket.emit('new chat', {                    
                     'facebook_user_token': response.authResponse.accessToken,                    
                     'chat': this.state.value,
@@ -24,9 +26,10 @@ export class Button extends React.Component {
             }        
         });
         
-        let auth2 = gapi.auth2.getAuthInstance();
-        let user = auth2.currentUser.get();
-        if (user.isSignedIn()) {  
+        if (!flag) {
+            let auth2 = gapi.auth2.getAuthInstance();
+            let user = auth2.currentUser.get();
+            if (user.isSignedIn()) {  
         
                 console.log("yup"); 
                 console.log(user.getAuthResponse().id_token);
@@ -40,6 +43,9 @@ export class Button extends React.Component {
                  console.log("coolio");
                 
             }
+        }
+        
+        
         
         console.log('Sent up the chat to server!', this.state.value);
 
