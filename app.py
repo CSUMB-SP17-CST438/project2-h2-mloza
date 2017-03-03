@@ -38,9 +38,6 @@ def hello():
 def on_connect():
     print "SOMEONE CONNECTED"
     
-    
-    
-    
     chats = models.Message.query.all()
     del all_chats[:]
     for user in chats:
@@ -51,7 +48,6 @@ def on_connect():
             'fbID': user.fbID,
             'url': user.url,
         })
-    # print all_chats
     socketio.emit('allchats', { 
         'chats': all_chats,
         
@@ -66,15 +62,10 @@ def on_connect():
             'media': user.media,
             'fbID': user.fbID,   
         })
-    for user in all_online_users:
-        print "TESTING2 " + user['name']
     socketio.emit('allusers', { 
         'users': all_online_users,
         'onlineNum': len(all_online_users),
     }, broadcast=True)
-    
-    
-    print "sent"
 
 
 @socketio.on('disconnect')
@@ -84,15 +75,12 @@ def on_disconnect():
     # print request.sid
     users = models.Users.query.all()
     
-    for u in users:
-        if u.ip == request.sid:
+    # for u in users:
+    #     if u.ip == request.sid:
             
-            print u.user + " disconnected"
-            print u.fbID;
-        
-    
-    
-    print "DISCONNECTED: " + request.sid
+    #         print u.user + " disconnected"
+    #         print u.fbID;
+    # print "DISCONNECTED: " + request.sid
         
     
 @socketio.on('new chat google')
@@ -103,7 +91,6 @@ def on_new_chat_google(data):
     
     
     if data['chat'].find("!!", 0, 2) != -1:
-        print " DRAGON "
         if data['chat'].find("!! say", 0, 6) != -1:
             botChat = data['chat'][7:]
         else:
@@ -153,25 +140,11 @@ def on_new_chat(data):
     response = requests.get( 
         'https://graph.facebook.com/v2.8/me?fields=id%2Cname%2Cpicture&access_token=' + data['facebook_user_token'])    
     json = response.json()
-    print json["id"]
     
     posURL = urlparse(data['chat'])  
-    # if posURL.scheme or posURL.netloc:
-    #     # valid url
-    #     print posURL.scheme + " " + posURL.netloc + " url"
-    #     all_chats.append({        
-    #     'name': json['name'],        
-    #     'picture': json['picture']['data']['url'],        
-    #     'chat':  data['chat'],   
-    #     })
-    #     msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'U')
-    #     models.db.session.add(msg)
-    #     models.db.session.commit()
         
     
     if data['chat'].find("!!", 0, 2) != -1:
-        # print " DRAGON "
-        print data['chat']
         if data['chat'].find("!! say", 0, 6) != -1:
             botChat = data['chat'][7:]
         elif data['chat'].find("!! food", 0, 7) != -1:
@@ -222,36 +195,6 @@ def on_new_chat(data):
                 botChat = "RAAAAWR!!!"
             elif data['chat'] == "!! eat":
                 botChat = "FREE FOOD! Thank you!"
-            # elif data['chat'] == "!! food":
-            #     botChat = "coming soon"
-            #     url = "https://api.yelp.com/v2/search?term=sushi&location=Monterey, CA&limit=40" 
-            #     oauth = requests_oauthlib.OAuth1(
-            #         'P9HpnKvg3flN6o1KrsHgxw', 
-            #         'uJm6epI8CUT968OQc_8K0xBR9PQ',
-            #         'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
-            #         'V_SBhCGKhBruxND3mswQC1pYCYE'
-            #     )
-            #     response = requests.get(url, auth=oauth)
-            #     json_body = response.json()
-            #     randNum = random.randint(0, 39) #only 40 hits are returned
-            #     name = json_body["businesses"][randNum]["name"]
-            #     yelpURL = json_body["businesses"][randNum]["url"]
-            #     phone = json_body["businesses"][randNum]["display_phone"]
-            #     foodStreet = json_body["businesses"][randNum]["location"]["display_address"][0]
-            #     foodCity = json_body["businesses"][randNum]["location"]["display_address"][1]
-            #     botChat = yelpURL
-            #     all_chats.append({        
-            #         'name': 'Dragon-bot',        
-            #         'picture': chatBotImg,        
-            #         'chat': botChat,   
-            #         'url': 'U',
-            #     })
-            #     msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, 'U')
-            #     models.db.session.add(msg)
-            #     models.db.session.commit()
-            #     botChat = name + " " + foodStreet + " " + foodCity + " " + phone
-            #     # print json_body
-            #     # print "LOCATION: " + foodStreet + " " + foodCity
             else:
                 botChat = "Nope! Check out !! help"
         all_chats.append({        
@@ -267,7 +210,6 @@ def on_new_chat(data):
         image = requests.head(data['chat'])
         posImg = image.headers.get('content-type')
         if (posImg == "image/gif" or posImg == "image/png" or posImg == "image/jpeg"):
-            print "image"
             all_chats.append({        
                 'name': json['name'],        
                 'picture': json['picture']['data']['url'],        
@@ -278,7 +220,6 @@ def on_new_chat(data):
             models.db.session.add(msg)
             models.db.session.commit()
         else:
-            # print posURL.scheme + " " + posURL.netloc + " url"
             all_chats.append({        
                 'name': json['name'],        
                 'picture': json['picture']['data']['url'],        
@@ -298,7 +239,6 @@ def on_new_chat(data):
         msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], '')
         models.db.session.add(msg)
         models.db.session.commit()
-    # print all_chats
     socketio.emit('all chats', { 
         'chats': all_chats,
     }, broadcast=True)
@@ -341,9 +281,7 @@ def fbConnection(data):
         })
     
     
-    print "Logged in user: " + json['name']
     for user in users:
-        print "pirnt: " + user.user;
         if (user.user == json['name']):
             flag = True;
     if (flag == False):
@@ -352,8 +290,6 @@ def fbConnection(data):
                 'picture': json['picture']['data']['url'],
                 'media': 'FB',
             })
-        for usr in all_online_users:
-            print "all online: " + usr['name']
         usr = models.Users(json['picture']['data']['url'], json['id'], 'FB', json['name'], request.sid)
         models.db.session.add(usr)
         models.db.session.commit()
@@ -368,9 +304,6 @@ def gConnection(data):
     response = requests.get( 
     'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_user_token'])    
     json = response.json()
-    print json["email"] + " email?"
-    print "test"
-    print "Got an event for new number with data:", data
     
     
     botChat = 'Welcome, ' + json['name'] + '! Say hi, everyone!!!'
@@ -399,9 +332,7 @@ def gConnection(data):
         })
         
     flag = False;
-    print "Logged in user: " + json['name']
     for user in users:
-        print "pirnt: " + user.user;
         if (user.user == json['name']):
             flag = True;
     if (flag == False):
@@ -410,8 +341,6 @@ def gConnection(data):
                 'picture': json['picture'],
                 'media': 'G'
             })
-        for usr in all_online_users:
-            print "all online: " + usr['name']
         usr = models.Users(json['picture'], data['gID'], 'G', json['name'], request.sid)
         models.db.session.add(usr)
         models.db.session.commit()
@@ -423,15 +352,14 @@ def gConnection(data):
     
   
     
-@socketio.on('gLoggedIn')
-def gLog(data):
-    print " GOOOOOOGLE"
-    print data['gUser']
+# @socketio.on('gLoggedIn')
+# def gLog(data):
+#     print " GOOOOOOGLE"
+#     print data['gUser']
     
         
 @socketio.on('fbDisconnected')
 def fbDisconnection(data):
-    print "USERID: " + data['userID']
     offlineUser = models.Users.query.filter_by(fbID=data['userID']).first();
     discUser = offlineUser.user;
     models.db.session.delete(offlineUser)
@@ -472,7 +400,6 @@ def fbDisconnection(data):
 
 @socketio.on('gDisconnected')
 def gDisconnection(data):
-    print "USERID G: " + data['userID']
     offlineUser = models.Users.query.filter_by(fbID=data['userID']).first();
     discUser = offlineUser.user;
     models.db.session.delete(offlineUser)
