@@ -89,6 +89,7 @@ def on_new_chat_google(data):
     'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + data['google_user_token'])    
     json = response.json()
     
+    posURL = urlparse(data['chat']) 
     
     if data['chat'].find("!!", 0, 2) != -1:
         if data['chat'].find("!! say", 0, 6) != -1:
@@ -154,6 +155,29 @@ def on_new_chat_google(data):
         msg = models.Message(chatBotImg, '1', 'Dragon-bot', botChat, '')
         models.db.session.add(msg)
         models.db.session.commit()
+    elif posURL.scheme or posURL.netloc:
+        image = requests.head(data['chat'])
+        posImg = image.headers.get('content-type')
+        if (posImg == "image/gif" or posImg == "image/png" or posImg == "image/jpeg"):
+            all_chats.append({        
+                'name': json['name'],        
+                'picture': json['picture']['data']['url'],        
+                'chat':  data['chat'], 
+                'url': 'I',
+            })
+            msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'I')
+            models.db.session.add(msg)
+            models.db.session.commit()
+        else:
+            all_chats.append({        
+                'name': json['name'],        
+                'picture': json['picture']['data']['url'],        
+                'chat':  data['chat'], 
+                'url': 'U',
+            })
+            msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'U')
+            models.db.session.add(msg)
+            models.db.session.commit()
     else:
         all_chats.append({        
         'name': json['name'],        
