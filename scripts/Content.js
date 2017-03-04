@@ -105,7 +105,7 @@ export class Content extends React.Component {
                 } else if (n.url == 'I') {
                     return <li key={index}>                
                         <img id="profPic" src={n.picture} /> 
-                        {n.name}: <img src={n.chat} />
+                        {n.name}: <img id="inChatImg" src={n.chat} />
                                     
                     </li>
                 }

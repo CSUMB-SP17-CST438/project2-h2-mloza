@@ -13215,7 +13215,7 @@ var Content = exports.Content = function (_React$Component) {
                         React.createElement('img', { id: 'profPic', src: n.picture }),
                         n.name,
                         ': ',
-                        React.createElement('img', { src: n.chat })
+                        React.createElement('img', { id: 'inChatImg', src: n.chat })
                     );
                 } else {
                     return React.createElement(
