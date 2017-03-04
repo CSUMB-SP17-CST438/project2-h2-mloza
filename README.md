@@ -20,3 +20,6 @@ which makes sense. Lastly, integrations tests wouldn't allowing CircleCl to buil
 I finally realized that it was because that I forgot the - at the beginning. 
 
 ## How would you improve it if you had more time?
+I would try to figure out how to only have the login buttons if the client hasn't
+logged in. If they are, then only show their associated logout button. But I
+can't seem to figure it out.

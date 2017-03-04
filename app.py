@@ -99,18 +99,18 @@ def on_new_chat_google(data):
             foodName = food[0]
             foodLoc = food[1]
             url = "https://api.yelp.com/v2/search?term="+foodName+"&location="+foodLoc+"&limit=40" 
-            oauth = requests_oauthlib.OAuth1(
-                'P9HpnKvg3flN6o1KrsHgxw', 
-                'uJm6epI8CUT968OQc_8K0xBR9PQ',
-                'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
-                'V_SBhCGKhBruxND3mswQC1pYCYE'
-            )
             # oauth = requests_oauthlib.OAuth1(
-            #     os.getenv("YELP_CONSUMER_KEY"), 
-            #     os.getenv("YELP_CONSUMER_SECRET_KEY"),
-            #     os.getenv("YELP_TOKEN_KEY"),
-            #     os.getenv("YELP_TOKEN_SECRET_KEY")
+            #     'P9HpnKvg3flN6o1KrsHgxw', 
+            #     'uJm6epI8CUT968OQc_8K0xBR9PQ',
+            #     'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
+            #     'V_SBhCGKhBruxND3mswQC1pYCYE'
             # )
+            oauth = requests_oauthlib.OAuth1(
+                os.getenv("YELP_CONSUMER_KEY"), 
+                os.getenv("YELP_CONSUMER_SECRET_KEY"),
+                os.getenv("YELP_TOKEN_KEY"),
+                os.getenv("YELP_TOKEN_SECRET_KEY")
+            )
             response = requests.get(url, auth=oauth)
             json_body = response.json()
             randNum = random.randint(0, 39) #only 40 hits are returned
@@ -192,18 +192,18 @@ def on_new_chat(data):
             foodName = food[0]
             foodLoc = food[1]
             url = "https://api.yelp.com/v2/search?term="+foodName+"&location="+foodLoc+"&limit=40" 
-            oauth = requests_oauthlib.OAuth1(
-                'P9HpnKvg3flN6o1KrsHgxw', 
-                'uJm6epI8CUT968OQc_8K0xBR9PQ',
-                'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
-                'V_SBhCGKhBruxND3mswQC1pYCYE'
-            )
             # oauth = requests_oauthlib.OAuth1(
-            #     os.getenv("YELP_CONSUMER_KEY"), 
-            #     os.getenv("YELP_CONSUMER_SECRET_KEY"),
-            #     os.getenv("YELP_TOKEN_KEY"),
-            #     os.getenv("YELP_TOKEN_SECRET_KEY")
+            #     'P9HpnKvg3flN6o1KrsHgxw', 
+            #     'uJm6epI8CUT968OQc_8K0xBR9PQ',
+            #     'eCEh6_yEE7S1i0r3h7GNO-CIF_llaDOb',
+            #     'V_SBhCGKhBruxND3mswQC1pYCYE'
             # )
+            oauth = requests_oauthlib.OAuth1(
+                os.getenv("YELP_CONSUMER_KEY"), 
+                os.getenv("YELP_CONSUMER_SECRET_KEY"),
+                os.getenv("YELP_TOKEN_KEY"),
+                os.getenv("YELP_TOKEN_SECRET_KEY")
+            )
             response = requests.get(url, auth=oauth)
             json_body = response.json()
             randNum = random.randint(0, 39) #only 40 hits are returned
@@ -484,4 +484,3 @@ if __name__ == '__main__':  # __name__!
         port=int(os.getenv('PORT', 8080)),
         debug=True
     )
-
