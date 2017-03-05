@@ -23,3 +23,7 @@ I finally realized that it was because that I forgot the - at the beginning.
 I would try to figure out how to only have the login buttons if the client hasn't
 logged in. If they are, then only show their associated logout button. But I
 can't seem to figure it out.
+
+## Points from handin 1
+I managed to get google login working. However, it is advised to logout from
+Facebook before logging in and vice versa.
