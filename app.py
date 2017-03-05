@@ -161,21 +161,21 @@ def on_new_chat_google(data):
         if (posImg == "image/gif" or posImg == "image/png" or posImg == "image/jpeg"):
             all_chats.append({        
                 'name': json['name'],        
-                'picture': json['picture']['data']['url'],        
+                'picture': json['picture'],        
                 'chat':  data['chat'], 
                 'url': 'I',
             })
-            msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'I')
+            msg = models.Message(json['picture'], data['gID'], json['name'], data['chat'], 'I')
             models.db.session.add(msg)
             models.db.session.commit()
         else:
             all_chats.append({        
                 'name': json['name'],        
-                'picture': json['picture']['data']['url'],        
+                'picture': json['picture'],        
                 'chat':  data['chat'], 
                 'url': 'U',
             })
-            msg = models.Message(json['picture']['data']['url'], json['id'], json['name'], data['chat'], 'U')
+            msg = models.Message(json['picture'], data['gID'], json['name'], data['chat'], 'U')
             models.db.session.add(msg)
             models.db.session.commit()
     else:
